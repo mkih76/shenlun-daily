@@ -1,0 +1,13 @@
+name = "shenlun-worker-v2"
+main = "src/worker.js"
+compatibility_date = "2024-01-01"
+
+[[kv_namespaces]]
+binding = "ARTICLES"
+id = "YOUR_KV_NAMESPACE_ID"  # 从 Cloudflare 控制台获取，勿提交真实值
+
+[triggers]
+crons = ["0 0 * * *"]
+
+[ai]
+binding = "AI"

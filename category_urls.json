@@ -1,0 +1,55 @@
+{
+  "categories": {
+    "作风类": {
+      "label": "工作作风",
+      "color": "C00000",
+      "column_url": "http://opinion.people.com.cn/GB/8213/49160/457596/index.html",
+      "column_name": "仲音"
+    },
+    "党建类": {
+      "label": "党的建设",
+      "color": "8B0000",
+      "column_url": "http://opinion.people.com.cn/GB/8213/49160/49217/index.html",
+      "column_name": "本报评论员"
+    },
+    "经济类": {
+      "label": "经济建设",
+      "color": "0070C0",
+      "column_url": "http://opinion.people.com.cn/GB/8213/49160/461970/index.html",
+      "column_name": "每周经济评论"
+    },
+    "科技类": {
+      "label": "科技创新",
+      "color": "7030A0",
+      "column_url": "http://opinion.people.com.cn/GB/51854/index.html",
+      "column_name": "教育科技"
+    },
+    "民生类": {
+      "label": "民生保障",
+      "color": "00B050",
+      "column_url": "http://opinion.people.com.cn/GB/51863/index.html",
+      "column_name": "社会民生"
+    },
+    "生态类": {
+      "label": "生态文明",
+      "color": "385723",
+      "column_url": "http://opinion.people.com.cn/GB/223228/index.html",
+      "column_name": "壹时评"
+    },
+    "文化类": {
+      "label": "文化建设",
+      "color": "BF8F00",
+      "column_url": "http://opinion.people.com.cn/GB/364183/index.html",
+      "column_name": "文化娱乐"
+    },
+    "治理类": {
+      "label": "社会治理",
+      "color": "404040",
+      "column_url": "http://opinion.people.com.cn/GB/8213/49160/461964/index.html",
+      "column_name": "寰宇平"
+    }
+  },
+  "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+  "request_delay_sec": 2,
+  "per_category_articles": 1
+}

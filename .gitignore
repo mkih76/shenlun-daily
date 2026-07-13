@@ -1,0 +1,30 @@
+# ── Runtime / generated data ──
+*.db
+*.sqlite
+*.sqlite3
+logs/
+today_articles.json
+site/data/*.json
+
+# ── Build artifacts ──
+.wrangler/
+**/.wrangler/
+dist/
+node_modules/
+__pycache__/
+*.pyc
+*.pyo
+
+# ── Secrets (keep .env.example tracked) ──
+.env
+.env.*
+!.env.example
+
+# ── OS / editor ──
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# ── Temp / backups ──
+*.bak

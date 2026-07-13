@@ -1,0 +1,1381 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>申论议论文 · 每日精选</title>
+<meta name="description" content="人民日报观点频道每日议论文精选，申论素材积累与好词金句库">
+<meta name="theme-color" content="#C00000">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📰</text></svg>">
+<style>/* ═══════════════════════════════════════════════════════════
+   申论议论文 · 每日精选 — 设计系统
+   Powered by Notion Design Language
+   温暖极简 · 衬线标题 · 柔和表面 · 中文阅读优先
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Design Tokens (Notion-inspired) ────── */
+:root {
+  /* ══ Surfaces ══ */
+  --canvas: #ffffff;
+  --surface: #f6f5f4;
+  --surface-soft: #fafaf9;
+  --surface-hover: #efedeb;
+
+  /* ══ Text (warm charcoal scale) ══ */
+  --ink-deep: #000000;
+  --ink: #1a1a1a;
+  --charcoal: #37352f;
+  --slate: #5d5b54;
+  --steel: #787671;
+  --stone: #a4a097;
+  --muted: #bbb8b1;
+
+  /* ══ Hairlines ══ */
+  --hairline: #e5e3df;
+  --hairline-soft: #ede9e4;
+  --hairline-strong: #c8c4be;
+
+  /* ══ Accent (Notion purple) ══ */
+  --primary: #5645d4;
+  --primary-hover: #4534b3;
+  --primary-light: #efeefc;
+  --link: #0075de;
+
+  /* ══ 8 Category Colors (申论专属) ══ */
+  --cat-zuofeng: #C00000;
+  --cat-dangjian: #8B0000;
+  --cat-jingji: #0070C0;
+  --cat-keji: #7030A0;
+  --cat-minsheng: #00884A;
+  --cat-shengtai: #385723;
+  --cat-wenhua: #B8860B;
+  --cat-zhili: #404040;
+
+  /* ══ Semantic ══ */
+  --success: #1aae39;
+  --warning: #dd5b00;
+  --error: #e03131;
+
+  /* ══ Phrase accents ══ */
+  --gold: #B8860B;
+  --gold-bg: #FFFDF5;
+  --gold-border: #E8D5A0;
+  --highlight-yellow: #fef7d6;
+
+  /* ══ Layout ══ */
+  --max-width: 960px;
+  --content-width: 720px;
+
+  /* ══ Radius (Notion scale) ══ */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+
+  /* ══ Spacing (Notion scale) ══ */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space: 12px;
+  --space-md: 16px;
+  --space-lg: 20px;
+  --space-xl: 24px;
+  --space-2xl: 32px;
+  --space-3xl: 40px;
+  --space-section: 64px;
+
+  /* ══ Typography (Notion hierarchy, adapted for Chinese) ══ */
+  --font-sans: "Microsoft YaHei", "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", Inter, system-ui, sans-serif;
+  --font-serif: "Noto Serif SC", "Source Han Serif SC", "STSong", Georgia, serif;
+
+  --text-hero: 1.75rem;      /* 28px — page title */
+  --text-h1: 1.5rem;          /* 24px — section heading */
+  --text-h2: 1.25rem;         /* 20px — card title */
+  --text-h3: 1.125rem;        /* 18px — sub heading */
+  --text-body: 1rem;          /* 16px — reading body */
+  --text-sm: 0.875rem;        /* 14px — meta */
+  --text-xs: 0.8125rem;       /* 13px — caption */
+  --text-micro: 0.75rem;      /* 12px — fine print */
+  --text-button: 0.875rem;    /* 14px — buttons */
+
+  --leading-display: 1.15;
+  --leading-heading: 1.25;
+  --leading-body: 1.55;
+  --leading-reading: 1.8;
+  --leading-relaxed: 2.0;
+
+  --weight-bold: 600;
+  --weight-medium: 500;
+  --weight-regular: 400;
+
+  /* ══ Shadows ══ */
+  --shadow-none: 0 0 0 0 transparent;
+  --shadow-xs: 0 1px 2px rgba(0,0,0,.04);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,.06);
+  --shadow: 0 2px 8px rgba(0,0,0,.06);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,.1);
+  --shadow-xl: 0 16px 40px rgba(0,0,0,.12);
+
+  /* ══ Transitions ══ */
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration: 180ms;
+}
+
+/* ── Dark Mode ─────────────────────────── */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --canvas: #1a1a1a;
+    --surface: #242424;
+    --surface-soft: #202020;
+    --surface-hover: #2e2e2e;
+    --ink-deep: #ffffff;
+    --ink: #e8e6e1;
+    --charcoal: #d4d2cc;
+    --slate: #a09d96;
+    --steel: #817e78;
+    --stone: #62605b;
+    --muted: #4a4844;
+    --hairline: #383836;
+    --hairline-soft: #323230;
+    --hairline-strong: #4a4844;
+    --primary: #7b6ff0;
+    --primary-hover: #9085f3;
+    --primary-light: #252040;
+    --link: #5ca0f0;
+    --shadow-xs: 0 1px 2px rgba(0,0,0,.3);
+    --shadow-sm: 0 1px 3px rgba(0,0,0,.4);
+    --shadow: 0 2px 8px rgba(0,0,0,.5);
+    --shadow-lg: 0 8px 24px rgba(0,0,0,.6);
+    --gold-bg: #2a2410;
+    --gold-border: #5a4820;
+    --highlight-yellow: #3d3508;
+  }
+}
+
+/* ── Reset & Base ───────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+body {
+  font-family: var(--font-sans);
+  background: var(--surface-soft);
+  color: var(--ink);
+  line-height: var(--leading-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+}
+
+a { color: var(--link); text-decoration: none; transition: color var(--duration) var(--ease); }
+a:hover { color: var(--primary); text-decoration: none; }
+img { max-width: 100%; display: block; }
+button { cursor: pointer; font-family: inherit; border: none; background: none; }
+
+/* ── Header ─────────────────────────────── */
+.site-header {
+  position: sticky; top: 0; z-index: 100;
+  background: color-mix(in srgb, var(--canvas) 88%, transparent);
+  border-bottom: 1px solid var(--hairline);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  backdrop-filter: blur(12px) saturate(180%);
+}
+
+.header-inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+
+.site-brand {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-sm);
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.site-brand .brand-title {
+  font-size: var(--text-h3);
+  font-weight: var(--weight-bold);
+  color: var(--ink-deep);
+  letter-spacing: -0.3px;
+}
+
+.site-brand .brand-dot {
+  color: var(--primary);
+  font-weight: var(--weight-bold);
+}
+
+.site-brand .brand-sub {
+  font-size: var(--text-sm);
+  color: var(--stone);
+  font-weight: var(--weight-regular);
+}
+
+.nav-links {
+  display: flex;
+  gap: 2px;
+  background: var(--canvas);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-full);
+  padding: 3px;
+}
+
+.nav-links a {
+  padding: 6px 16px;
+  border-radius: var(--radius-full);
+  font-size: var(--text-sm);
+  color: var(--slate);
+  font-weight: var(--weight-medium);
+  transition: all var(--duration) var(--ease);
+  text-decoration: none;
+}
+
+.nav-links a:hover {
+  color: var(--ink);
+  background: var(--surface-hover);
+}
+
+.nav-links a.active {
+  background: var(--primary);
+  color: #ffffff;
+  box-shadow: var(--shadow-xs);
+}
+
+.nav-links a.active:hover {
+  background: var(--primary-hover);
+  color: #ffffff;
+}
+
+/* ── Main Content ───────────────────────── */
+.main-content {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 28px 24px 60px;
+}
+
+/* ── Today Banner ───────────────────────── */
+.today-banner {
+  background: var(--canvas);
+  border-radius: var(--radius-lg);
+  padding: 20px 24px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-xs);
+  border: 1px solid var(--hairline-soft);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space);
+}
+
+.today-banner .today-date {
+  font-size: var(--text-hero);
+  font-weight: var(--weight-bold);
+  letter-spacing: -0.5px;
+}
+
+.today-banner .today-weekday {
+  font-size: var(--text-body);
+  color: var(--slate);
+  margin-left: 6px;
+  font-weight: var(--weight-regular);
+}
+
+.today-banner .today-meta {
+  display: flex;
+  gap: var(--space-md);
+  font-size: var(--text-sm);
+  color: var(--steel);
+}
+
+/* ── Category Filter Pills ──────────────── */
+.cat-nav {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.cat-nav button {
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  font-size: var(--text-sm);
+  border: 1px solid var(--hairline);
+  background: var(--canvas);
+  color: var(--slate);
+  font-weight: var(--weight-medium);
+  transition: all var(--duration) var(--ease);
+}
+
+.cat-nav button:hover {
+  border-color: var(--hairline-strong);
+  color: var(--ink);
+  background: var(--surface-hover);
+}
+
+.cat-nav button.active {
+  background: var(--ink);
+  color: var(--canvas);
+  border-color: var(--ink);
+  font-weight: var(--weight-bold);
+}
+
+/* ── Article Cards Grid ─────────────────── */
+.articles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-md);
+}
+
+/* ── Article Card (Notion card aesthetic) ─ */
+.article-card {
+  background: var(--canvas);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-xs);
+  border: 1px solid var(--hairline-soft);
+  overflow: hidden;
+  cursor: pointer;
+  transition: all var(--duration) var(--ease);
+  display: flex;
+  flex-direction: column;
+}
+
+.article-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+  border-color: var(--hairline);
+}
+
+.article-card .card-top-bar {
+  height: 3px;
+}
+
+.article-card .card-body {
+  padding: 18px 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.article-card .card-category {
+  font-size: var(--text-xs);
+  font-weight: var(--weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.article-card .card-title {
+  font-size: var(--text-body);
+  font-weight: var(--weight-bold);
+  line-height: var(--leading-heading);
+  margin-bottom: 8px;
+  color: var(--ink);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.article-card .card-excerpt {
+  font-size: var(--text-sm);
+  color: var(--stone);
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  flex: 1;
+}
+
+.article-card .card-footer {
+  padding: 10px 20px;
+  border-top: 1px solid var(--hairline-soft);
+  display: flex;
+  gap: var(--space-sm);
+  font-size: var(--text-micro);
+  color: var(--steel);
+}
+
+.article-card .card-footer .badge {
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  background: var(--primary-light);
+  color: var(--primary);
+  font-weight: var(--weight-medium);
+}
+
+/* ── Reading Overlay ────────────────────── */
+.reading-overlay {
+  position: fixed; inset: 0; z-index: 200;
+  background: rgba(0,0,0,.45);
+  display: flex; align-items: flex-start; justify-content: center;
+  padding: 40px 16px 80px; overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.reading-panel {
+  background: var(--canvas);
+  border-radius: var(--radius-lg);
+  max-width: var(--content-width);
+  width: 100%;
+  box-shadow: var(--shadow-xl);
+  animation: panelSlideIn .25s var(--ease);
+}
+
+@keyframes panelSlideIn {
+  from { opacity: 0; transform: translateY(16px) scale(.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.reading-header {
+  padding: 24px 28px;
+  border-bottom: 1px solid var(--hairline-soft);
+  display: flex; align-items: flex-start; gap: 14px;
+  position: sticky; top: 0; background: var(--canvas);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0; z-index: 2;
+}
+
+.reading-header .cat-badge {
+  padding: 4px 12px; border-radius: var(--radius-xs);
+  font-size: var(--text-xs); font-weight: var(--weight-bold);
+  color: #ffffff; white-space: nowrap; line-height: 1.5;
+}
+
+.reading-header .reading-title {
+  flex: 1;
+  font-size: var(--text-h1);
+  font-weight: var(--weight-bold);
+  line-height: var(--leading-heading);
+  color: var(--ink-deep);
+}
+
+.reading-header .close-btn {
+  font-size: 1.25rem; color: var(--stone);
+  padding: 4px 10px; border-radius: var(--radius-xs);
+  transition: all var(--duration) var(--ease); line-height: 1;
+}
+
+.reading-header .close-btn:hover {
+  background: var(--surface-hover); color: var(--ink);
+}
+
+.reading-meta {
+  padding: 12px 28px; font-size: var(--text-sm);
+  color: var(--steel);
+  border-bottom: 1px solid var(--hairline-soft);
+  display: flex; gap: var(--space-md); flex-wrap: wrap;
+}
+
+.reading-meta a { color: var(--link); }
+
+.reading-body {
+  padding: 32px 28px;
+}
+
+.reading-body p {
+  font-size: var(--text-body);
+  line-height: var(--leading-reading);
+  margin-bottom: 1.2em;
+  text-indent: 2em;
+  font-family: var(--font-serif);
+  color: var(--charcoal);
+}
+
+.reading-body p:first-child { text-indent: 0; }
+
+.reading-extras {
+  margin: 0 28px 28px;
+  padding: 20px 24px;
+  background: var(--highlight-yellow);
+  border: 1px solid var(--gold-border);
+  border-radius: var(--radius);
+}
+
+.reading-extras h4 {
+  font-size: var(--text-sm); color: var(--gold);
+  margin-bottom: 14px; font-weight: var(--weight-bold);
+}
+
+.word-tags {
+  display: flex; flex-wrap: wrap; gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+.word-tag {
+  padding: 4px 12px; border-radius: var(--radius-full);
+  font-size: var(--text-sm);
+  border: 1px solid var(--gold-border);
+  background: var(--canvas); color: var(--gold);
+  font-weight: var(--weight-medium);
+}
+
+.golden-sentence {
+  padding: 12px 0;
+  border-bottom: 1px dashed var(--gold-border);
+  font-size: var(--text-sm); line-height: 1.7;
+  color: var(--slate);
+}
+
+.golden-sentence:last-child { border-bottom: none; }
+
+.golden-sentence .gs-type {
+  display: inline-block;
+  font-size: .7rem; padding: 1px 7px;
+  border-radius: var(--radius-full);
+  background: var(--primary-light); color: var(--primary);
+  margin-right: 8px; vertical-align: middle;
+  font-weight: var(--weight-medium);
+}
+
+/* ── Reading Controls ───────────────────── */
+.reading-controls {
+  display: flex; gap: var(--space-sm);
+  padding: var(--space) 28px;
+  border-top: 1px solid var(--hairline-soft);
+}
+
+.reading-controls button {
+  padding: 5px 14px; border-radius: var(--radius-full);
+  border: 1px solid var(--hairline);
+  font-size: var(--text-xs); color: var(--slate);
+  transition: all var(--duration) var(--ease);
+  font-weight: var(--weight-medium);
+}
+
+.reading-controls button:hover {
+  border-color: var(--hairline-strong); color: var(--ink);
+  background: var(--surface-hover);
+}
+
+/* ── Archive ────────────────────────────── */
+.archive-header { margin-bottom: 28px; }
+.archive-header h2 {
+  font-size: var(--text-hero);
+  font-weight: var(--weight-bold);
+  margin-bottom: 6px;
+  letter-spacing: -0.3px;
+}
+.archive-header .archive-stats {
+  font-size: var(--text-sm); color: var(--steel);
+}
+
+.year-section { margin-bottom: var(--space-3xl); }
+.year-section h3 {
+  font-size: var(--text-h1); font-weight: var(--weight-bold);
+  color: var(--primary); margin-bottom: var(--space-md);
+  padding-bottom: var(--space-sm);
+  border-bottom: 2px solid var(--primary-light);
+}
+.month-section { margin-bottom: var(--space-lg); }
+.month-section h4 {
+  font-size: var(--text-body); font-weight: var(--weight-bold);
+  color: var(--slate); margin-bottom: var(--space);
+}
+
+.date-grid {
+  display: flex; flex-wrap: wrap; gap: var(--space);
+}
+
+.date-card {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 12px 16px; border-radius: var(--radius);
+  border: 1px solid var(--hairline);
+  background: var(--canvas); cursor: pointer;
+  min-width: 64px; transition: all var(--duration) var(--ease);
+  text-decoration: none; color: var(--ink);
+}
+
+.date-card:hover {
+  border-color: var(--primary); color: var(--primary);
+  background: var(--primary-light);
+}
+
+.date-card .day-number {
+  font-size: var(--text-h1); font-weight: var(--weight-bold); line-height: 1.2;
+}
+
+.date-card .day-info {
+  font-size: var(--text-micro); color: var(--stone); margin-top: 2px;
+}
+
+/* ── Search ─────────────────────────────── */
+.search-container { max-width: 640px; margin: 0 auto; }
+
+.search-input-wrap { position: relative; margin-bottom: var(--space-2xl); }
+
+.search-input {
+  width: 100%; padding: 14px 20px; padding-left: 48px;
+  font-size: var(--text-h3); font-family: var(--font-sans);
+  border: 1.5px solid var(--hairline);
+  border-radius: var(--radius-lg); background: var(--canvas);
+  color: var(--ink); transition: border-color var(--duration) var(--ease);
+  outline: none;
+}
+
+.search-input:focus { border-color: var(--primary); }
+.search-input::placeholder { color: var(--muted); }
+
+.search-icon {
+  position: absolute; left: 16px; top: 50%;
+  transform: translateY(-50%); font-size: 1.2rem;
+  color: var(--stone); pointer-events: none;
+}
+
+.search-result {
+  background: var(--canvas); border-radius: var(--radius);
+  padding: 18px 22px; margin-bottom: var(--space);
+  border: 1px solid var(--hairline-soft); box-shadow: var(--shadow-xs);
+  cursor: pointer; transition: all var(--duration) var(--ease);
+}
+
+.search-result:hover {
+  box-shadow: var(--shadow); border-color: var(--primary);
+}
+
+.search-result .sr-cat {
+  font-size: var(--text-xs); font-weight: var(--weight-bold); margin-bottom: 6px;
+}
+
+.search-result .sr-title {
+  font-size: var(--text-body); font-weight: var(--weight-bold);
+  margin-bottom: 4px; color: var(--ink);
+}
+
+.search-result .sr-excerpt {
+  font-size: var(--text-sm); color: var(--stone); line-height: 1.6;
+}
+
+.search-result .sr-date {
+  font-size: var(--text-micro); color: var(--steel); margin-top: var(--space-sm);
+}
+
+.search-highlight {
+  background: var(--highlight-yellow); padding: 1px 2px; border-radius: 2px;
+}
+
+/* ── Phrases Page ───────────────────────── */
+.phrases-header { margin-bottom: 28px; }
+.phrases-header h2 {
+  font-size: var(--text-hero); font-weight: var(--weight-bold);
+  margin-bottom: 6px; letter-spacing: -0.3px;
+}
+.phrases-header p { font-size: var(--text-sm); color: var(--steel); }
+
+.phrases-stats {
+  display: flex; gap: var(--space-xl); margin-top: var(--space);
+}
+
+.phrases-stats .stat { text-align: center; }
+.phrases-stats .stat-value {
+  font-size: var(--text-h1); font-weight: var(--weight-bold); color: var(--primary);
+}
+.phrases-stats .stat-label {
+  font-size: var(--text-micro); color: var(--steel);
+}
+
+.word-cloud {
+  display: flex; flex-wrap: wrap; gap: var(--space-sm);
+  margin-bottom: var(--space-2xl);
+}
+
+.word-cloud .wc-item {
+  padding: 5px 14px; border-radius: var(--radius-full);
+  background: var(--canvas); border: 1px solid var(--hairline);
+  font-size: var(--text-sm); color: var(--slate);
+  transition: all var(--duration) var(--ease); cursor: default;
+  font-weight: var(--weight-medium);
+}
+
+.word-cloud .wc-item:hover {
+  border-color: var(--primary); color: var(--primary);
+  background: var(--primary-light); transform: scale(1.04);
+}
+
+.word-cloud .wc-item.size-l { font-size: var(--text-h3); font-weight: var(--weight-bold); padding: 6px 18px; }
+.word-cloud .wc-item.size-m { font-size: var(--text-body); padding: 5px 16px; }
+
+.golden-list { display: flex; flex-direction: column; gap: 14px; }
+
+.golden-item {
+  background: var(--canvas); border-radius: var(--radius);
+  border: 1px solid var(--hairline-soft); padding: 18px 22px;
+  border-left: 3px solid var(--primary);
+}
+
+.golden-item .gi-text {
+  font-size: var(--text-body); line-height: 1.8;
+  color: var(--ink); margin-bottom: 8px; font-style: italic;
+}
+
+.golden-item .gi-meta {
+  display: flex; gap: var(--space); flex-wrap: wrap;
+  font-size: var(--text-micro); color: var(--steel);
+}
+
+.golden-item .gi-badge {
+  padding: 1px 8px; border-radius: var(--radius-full);
+  font-size: .7rem; font-weight: var(--weight-bold);
+}
+
+.gi-badge.type-quote { background: #E8F5E9; color: #2E7D32; }
+.gi-badge.type-parallel { background: #E3F2FD; color: #1565C0; }
+.gi-badge.type-contrast { background: #FFF3E0; color: #E65100; }
+.gi-badge.type-couplet { background: var(--primary-light); color: var(--primary); }
+
+@media (prefers-color-scheme: dark) {
+  .gi-badge.type-quote { background: #1b3a1b; color: #81c784; }
+  .gi-badge.type-parallel { background: #0d2b45; color: #64b5f6; }
+  .gi-badge.type-contrast { background: #3d2000; color: #ffa726; }
+}
+
+/* ── Empty State ────────────────────────── */
+.empty-state {
+  text-align: center; padding: 60px 24px; color: var(--stone);
+}
+.empty-state .empty-icon { font-size: 3rem; margin-bottom: 12px; opacity: .5; }
+.empty-state h3 {
+  font-size: var(--text-h3); margin-bottom: 6px; color: var(--slate);
+}
+
+/* ── Loading Skeleton ───────────────────── */
+.skeleton {
+  background: linear-gradient(90deg, var(--surface) 25%, var(--hairline-soft) 50%, var(--surface) 75%);
+  background-size: 200% 100%; animation: shimmer 1.5s infinite;
+  border-radius: var(--radius);
+}
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ── Footer ─────────────────────────────── */
+.site-footer {
+  text-align: center; padding: var(--space-2xl) 24px;
+  color: var(--stone); font-size: var(--text-micro);
+  border-top: 1px solid var(--hairline);
+  max-width: var(--max-width); margin: 0 auto;
+}
+
+.site-footer .footer-brand { font-weight: var(--weight-bold); color: var(--primary); margin-bottom: 4px; }
+
+/* ── Responsive ─────────────────────────── */
+@media (max-width: 768px) {
+  .header-inner { padding: 10px 16px; flex-wrap: wrap; }
+  .site-brand .brand-sub { display: none; }
+  .nav-links a { padding: 5px 12px; font-size: var(--text-xs); }
+  .main-content { padding: 16px 12px 40px; }
+  .today-banner { padding: 16px 18px; }
+  .today-banner .today-date { font-size: var(--text-h1); }
+  .articles-grid { grid-template-columns: 1fr; }
+  .reading-overlay { padding: 0; align-items: stretch; }
+  .reading-panel { border-radius: 0; max-width: none; min-height: 100vh; }
+  .reading-header { padding: 16px 18px; border-radius: 0; }
+  .reading-header .reading-title { font-size: var(--text-h2); }
+  .reading-body { padding: 20px 18px; }
+  .reading-body p { font-size: var(--text-sm); }
+  .reading-extras { margin: 0 18px 20px; padding: 16px 18px; }
+  .date-grid { gap: var(--space-sm); }
+  .date-card { min-width: 56px; padding: 10px 12px; }
+}
+
+@media (max-width: 480px) {
+  .cat-nav { gap: 4px; }
+  .cat-nav button { padding: 4px 10px; font-size: var(--text-xs); }
+  .nav-links { width: 100%; justify-content: space-between; }
+  .site-brand { width: 100%; justify-content: center; }
+}
+
+/* ── Print ──────────────────────────────── */
+@media print {
+  .site-header, .nav-links, .cat-nav, .reading-controls, .site-footer { display: none; }
+  .main-content { padding: 0; max-width: none; }
+  .reading-panel { box-shadow: none; border: none; }
+  .reading-body p { font-family: var(--font-serif); }
+  body { background: #fff; color: #000; }
+  :root { --canvas: #fff; --surface: #fff; }
+}
+</style>
+<script>var SITE_TODAY={"作风类": {"title": "加大保障力度，切实改善民生", "author": "仲  音", "pub_date": "2024-08-04", "url": "http://opinion.people.com.cn/n1/2024/0804/c1003-40291932.html", "content": "今年上半年，跨省异地就医直接结算惠及参保人员1.08亿人次，减少资金垫付918.53亿元。贵州省启动新一轮省内八大流域横向生态保护补偿，生态美带动百姓富。海南省完成新生儿出生、教育入学等13个“一件事”改革上线，平均减环节约64%、减材料约76%。\n\n中国式现代化，民生为大。习近平总书记指出：“抓改革、促发展，归根到底就是为了让人民过上更好的日子。”日前召开的中共中央政治局会议强调：“要加大保障和改善民生力度。”切实保障和改善民生，通过持续发展强化保障和改善民生的物质基础，通过不断保障和改善民生创造更多有效需求，对于巩固和增强经济回升向好态势，以高质量发展全面推进中国式现代化，意义重大。\n\n民生是人民幸福之基。今年以来，在以习近平同志为核心的党中央坚强领导下，各地区各部门坚持在发展中稳步提升民生保障水平，在推动高质量发展中不断增进民生福祉。上半年，全国城镇新增就业698万人，完成全年目标任务的58%；居民人均可支配收入实际增速跑赢GDP增速；339个地级及以上城市平均空气质量优良天数比例同比上升1.4个百分点。人民群众的获得感、幸福感、安全感不断增强，为经济延续回升向好态势创造良好社会环境。\n\n抓民生也是抓发展。全力改善民生的过程，就是增加就业、扩大内需、催生新的经济增长点的过程。今年以来，消费品以旧换新行动在各地广泛开展，既促进城乡居民生活品质提升，也引导居民消费潜力持续释放，对拉动汽车、家电等耐用消费品增长起到催化作用——上半年，限额以上单位家用电器和音像器材类商品零售额增速比上年同期加快2.1个百分点，新能源乘用车零售量同比增长33.1%。实践充分证明，把保障和改善民生紧紧抓在手上，更好满足人民群众多样化、高品质消费需要，能够更好释放内需潜力、激发产业升级活力，为高质量发展注入强劲动力。\n\n推进中国式现代化，实现全体人民共同富裕，归根到底要靠高质量发展。当前我国经济发展遇到一些困难和问题，是发展中、转型中的问题，经过努力是完全可以克服的。越是在这样的时候，越要通过高质量发展兜牢民生底线，用心用情用力解决好人民群众急难愁盼问题。“高效办成一件事”改革，推动政务服务不仅“可办”而且“易办”；各地因地制宜推广三明医改经验取得积极进展，促进基本医疗服务均等化、更优质；完善财税政策，新能源汽车车辆购置税减免政策延长至2027年底，让消费者愿消费、得实惠……民生清单，也是发展清单。全面把握发展和民生相互牵动、互为条件的关系，使民生改善和经济发展有效对接、良性循环、相得益彰，就能推动经济发展和民生保障取得更大成效。\n\n为了人民的现代化，才有意义；依靠人民的现代化，才有动力。党的二十届三中全会《决定》提出：“在发展中保障和改善民生是中国式现代化的重大任务。”贯彻《决定》部署，坚持尽力而为、量力而行，完善基本公共服务制度体系，加强普惠性、基础性、兜底性民生建设，解决好人民最关心最直接最现实的利益问题，让现代化建设成果更多更公平惠及全体人民，必定能推动全体人民共同富裕取得更为明显的实质性进展，为推进中国式现代化凝聚起磅礴力量。", "phrases": ["三明医改", "上城市平", "上年同期", "上更好的", "中不断增", "中国式现", "中国式现代化", "中央坚强", "为了人民", "为推进中", "为明显的", "为经济延", "为高质量", "也引导居", "也是发展", "习近平总", "乡居民生", "书记指出", "互为条件", "人民共同", "人民群众", "今年上半", "今年以来", "代化的重", "以克服的"], "highlights": [{"text": "抓改革、促发展，归根到底就是为了让人民过上更好的日子。", "type": "引用"}, {"text": "在发展中保障和改善民生是中国式现代化的重大任务。", "type": "引用"}, {"text": "的物质基础，通过不断保障和改善民生创造更多有效需求，对于巩固和增强经济回升向好态势，以高质量发展全面推进中国式现代化，意义重大", "type": "排比"}, {"text": "今年以来，在以习近平同志为核心的党中央坚强领导下，各地区各部门坚持在发展中稳步提升民生保障水平，在推动高质量发展中不断增进民生福祉", "type": "排比"}, {"text": "紧抓在手上，更好满足人民群众多样化、高品质消费需要，能够更好释放内需潜力、激发产业升级活力，为高质量发展注入强劲动力", "type": "排比"}, {"text": "推进中国式现代化，实现全体人民共同富裕，归根到底要靠高质量发展", "type": "排比"}]}, "党建类": {"title": "人民日报评论员：更加清醒坚定地推进反腐败斗争——论学习贯彻习近平总书记二十届中央纪委五次全会重要讲话精神", "author": "", "pub_date": "", "url": "http://opinion.people.com.cn/n1/2026/0114/c461529-40645444.html", "content": "新华社北京1月14日电人民日报1月15日评论员文章：更加清醒坚定地推进反腐败斗争——论学习贯彻习近平总书记二十届中央纪委五次全会重要讲话精神\n\n“腐败是党和国家事业发展进程中的拦路虎、绊脚石，反腐败是一场输不起也决不能输的重大斗争。”在二十届中央纪委五次全会上，习近平总书记准确把握反腐败斗争形势任务以及阶段性特征，部署以更高标准、更实举措推进全面从严治党，强调“更加清醒坚定地推进反腐败斗争”。\n\n党的十八大以来，我们党开展了史无前例的反腐败斗争，以“得罪千百人、不负十四亿”的使命担当祛疴治乱，坚持无禁区、全覆盖、零容忍，“打虎”、“拍蝇”、“猎狐”多管齐下，成功走出一条在党中央集中统一领导下，标本兼治、一体推进不敢腐不能腐不想腐的中国特色反腐败之路。\n\n徙木立信从严管党治党，去腐生肌推进自我革命，赢得了确保党不变质、不变色、不变味的历史主动，赢得了党团结带领全体人民为强国建设、民族复兴伟业共同奋斗的历史主动。放眼全世界，只有中国共产党能够做到，这是我们党的显著优势，也是引领时代的制胜之道。面向未来，这条中国特色反腐败之路要坚定走下去。\n\n“管党治党越有效，经济社会发展的保障就越有力。”新时代以来的实践表明，党的自我革命和经济社会发展是紧密相联、相互促进、相得益彰的。“十五五”时期我国发展环境面临深刻复杂变化，通过党的自我革命，弘扬新风正气、纠治顽瘴痼疾，营造良好政治生态，激励干部担当作为，凝聚民心民力，就能为经济社会发展源源不断注入正能量。\n\n“当前，反腐败斗争形势仍然严峻复杂，铲除腐败滋生土壤和条件任务仍然艰巨繁重。”这次全会上，习近平总书记重申“两个仍然”的重大判断，强调要“保持高压态势不动摇”“不断提高反腐败穿透力”“在一体推进上下更大功夫”，为纵深推进反腐败斗争指明了方法路径。\n\n随着反腐败斗争进入深水区，触及利益越来越深，贪腐行为的关联性隐蔽性越来越强，查处难度越来越大。只有把握腐败的新动向新特点，创新手段方式，及时发现、准确识别、有效治理各类腐败问题，才能不断提高反腐败穿透力。\n\n不正之风和腐败问题互为表里、同根同源。由风及腐、风腐交织是许多违纪违法案件的鲜明特点。日前播出的电视专题片《一步不停歇 半步不退让》第一集《纠风治乱为民》中，有落马官员在镜头前忏悔，“我其实违法犯罪，都是从吃喝问题，从违反（中央）八项规定（精神）开始的”。\n\n浙江省纪委监委在查处“四风”问题时，对有无吃喝圈、请托事项、利益输送、权钱交易等问题“四必看”，由“风”的线头扯出“腐”的线团；云南省临沧市纪委监委在工作中坚持循线深挖，延伸了解个人及其所在地区、部门和单位的政治生态及“四风”问题，以案促改促治……\n\n既“由风查腐”，又“由腐纠风”，以“同查”严惩风腐交织问题，以“同治”铲除风腐共性根源，以“查”“治”贯通阻断风腐演变。透过“风”的表象，揭开“腐”的本质，深挖不作为乱作为背后的以商养官、以官护商、官商一体，彻查违规吃喝背后的请托办事、利益输送，定能形成强有力的震慑效应，不断筑牢风腐防治的防线。\n\n我们党是一个大党，领导的是一个大国，进行的是前无古人的伟大事业。“赶考”未有穷期，“窑洞之问”常答常新。我们要在以习近平同志为核心的党中央坚强领导下，坚持不懈走中国特色反腐败之路，更加清醒坚定地推进反腐败斗争，以愚公移山、精卫填海的精神把反腐败斗争进行到底。", "phrases": ["一个大党", "一个大国", "一体推进", "一场输不", "一条在党", "一步不停", "不变味的", "不敢腐不", "不敢腐不能腐不想腐", "不断提高", "不断筑牢", "不正之风", "不负十四", "业发展进", "两个仍然", "严惩风腐", "个人及其", "中央纪委", "中央集中", "为乱作为", "为强国建", "为纵深推", "也是引领", "习近平总", "书记准确"], "highlights": [{"text": "腐败是党和国家事业发展进程中的拦路虎、绊脚石，反腐败是一场输不起也决不能输的重大斗争。", "type": "引用"}, {"text": "管党治党越有效，经济社会发展的保障就越有力。", "type": "引用"}, {"text": "当前，反腐败斗争形势仍然严峻复杂，铲除腐败滋生土壤和条件任务仍然艰巨繁重。", "type": "引用"}, {"text": "我其实违法犯罪，都是从吃喝问题，从违反（中央）八项规定（精神）开始的", "type": "引用"}, {"text": "近平总书记准确把握反腐败斗争形势任务以及阶段性特征，部署以更高标准、更实举措推进全面从严治党，强调“更加清醒坚定地推进反腐败斗争”", "type": "排比"}, {"text": "放眼全世界，只有中国共产党能够做到，这是我们党的显著优势，也是引领时代的制胜之道", "type": "排比"}]}, "经济类": {"title": "从能源之稳看中国经济确定性（每周经济评论）", "author": "", "pub_date": "", "url": "http://opinion.people.com.cn/n1/2026/0708/c461529-40755426.html", "content": "近日联合国发布的《2026年世界经济形势与展望》年中更新报告提到，当前的能源市场动荡是“现代历史上规模最大的冲击之一”。\n\n在多家国际机构因中东冲突下调全球经济增速预期的背景下，中国却成为“例外”。世界银行在其最新展望中判断，“在中国，增长延续稳健步伐。”摩根士丹利、德意志银行等逆势上调中国经济增速预测，能源优势是其看好中国的重要原因。\n\n世界变乱交织，确定性日益成为全球稀缺资源。剖析中国能源之稳，可以更深切感受中国何以成为“确定性的绿洲”。\n\n确定性中，有“集中精力办好自己的事”的笃定。\n\n能源是工业的粮食、经济的命脉，此次国际油气价格剧烈波动，我国能源体系展现出强大抗风险能力，有力保障了经济平稳运行和民生需求。这种韧性靠的是“集中精力办好自己的事”的战略清醒和战略定力。\n\n看大势，国际能源安全问题日趋复杂，作为全球最大能源消费国和进口国，我们必须有效降低对外依存度。从启动战略石油储备建设，到超预期完成油气增储上产“七年行动计划”，再到形成自主深水油气开发技术体系，近年来，我国能源自给率稳步提升，以巩固自身能源的确定性应对外部形势的不确定性。\n\n眼下，欧洲因为高温天气陷入能源紧张，电价飙涨。相比之下，去年迎峰度夏期间，我国最大电力负荷4次创新高，全国电力供应平稳有序，经受住了高温考验。今年夏季我们依然有能力发挥好大电网、大通道、大市场优势，满足更大体量的用能需求。实践证明，端稳端牢能源饭碗，应对变局就有了更坚实基础和更充足底气。\n\n确定性中，有“一张蓝图绘到底”的坚持。\n\n人工智能蓬勃发展，对电力设施需求激增。当外界感叹“人工智能的尽头是电力”时，中国已成为全球首个重要“电力国家”，以澎湃电能支撑国产人工智能站上第一梯队。看似“恰逢其时”，实则久久为功。在2026年夏季达沃斯论坛上，美国学者凯莉·西姆斯·加拉格尔道出了中国塑造能源优势的密码：“中国会设定明确目标，并构建稳定的政策基础设施，以支持实现目标”。\n\n近些年，一些欧美国家能源政策反复摇摆，新能源建设一波三折。再看我国，从“十三五”时期部署能源发展重大工程，到“十四五”时期加快建设大型清洁能源基地，进入“十五五”，又提出实施非化石能源十年倍增行动，顶层设计一以贯之、政策举措有序衔接，推动新能源从电力系统“配角”一步步变为“主角”，实现跨越式发展。实践证明，锚定长远目标，保持历史耐心，就能为高质量发展创造更稳定、更可持续的宏观环境。\n\n确定性中，有“立己达人、共谋发展”的胸怀。\n\n当今世界，围绕能源资源权、通道权和市场权的竞争日趋激烈。当部分国家把能源当作地缘政治武器和外交筹码时，中国则选择以“开源式现代化”助力各国破解能源难题。\n\n前不久，肯尼亚农民尼古拉斯晒出账本——得益于中国光伏，他摆脱了断电困扰，电费支出大幅下降。在巴基斯坦，中国光伏板甚至被列为嫁妆，人们盛赞其能够为家庭创造收益。放眼全球，我国不仅提供了80%以上的光伏组件和70%的风电装备，还帮助多国培育产业生态和技术人才。\n\n与天下同利者，天下持之。今年前5月，我国锂电池、风力发电机组等绿色产品出口同比增长约四成。实践证明，坚定不移扩大对外开放，深化国际合作，中国的确定性价值将更加彰显。\n\n“十五五”时期，我们要在不确定环境下做好确定性的事情。坚定信心、练好内功，不断夯实能源、粮食、产业链等安全根基，中国经济的前行步伐将更稳，发展优势将更足。", "phrases": ["一些欧美", "一以贯之", "一张蓝图", "一步步变", "七年行动", "上规模最", "上调中国", "下调全球", "不断夯实", "不确定环", "与天下同", "世界变乱", "世界经济", "世界银行", "业生态和", "业的粮食", "中东冲突", "中国会设", "中国光伏", "中国则选", "中国却成", "中国已成", "中国的确", "中国的重", "中国经济"], "highlights": [{"text": "中国会设定明确目标，并构建稳定的政策基础设施，以支持实现目标", "type": "引用"}, {"text": "是工业的粮食、经济的命脉，此次国际油气价格剧烈波动，我国能源体系展现出强大抗风险能力，有力保障了经济平稳运行和民生需求", "type": "排比"}, {"text": "看大势，国际能源安全问题日趋复杂，作为全球最大能源消费国和进口国，我们必须有效降低对外依存度", "type": "排比"}, {"text": "“七年行动计划”，再到形成自主深水油气开发技术体系，近年来，我国能源自给率稳步提升，以巩固自身能源的确定性应对外部形势的不确定性", "type": "排比"}, {"text": "相比之下，去年迎峰度夏期间，我国最大电力负荷4次创新高，全国电力供应平稳有序，经受住了高温考验", "type": "排比"}, {"text": "当外界感叹“人工智能的尽头是电力”时，中国已成为全球首个重要“电力国家”，以澎湃电能支撑国产人工智能站上第一梯队", "type": "排比"}]}, "科技类": {"title": "以开放合作推动实现高水平科技自立自强（专题深思）", "author": "", "pub_date": "", "url": "http://opinion.people.com.cn/n1/2026/0710/c461530-40757173.html", "content": "习近平总书记强调：“科技进步是世界性、时代性课题，唯有开放合作才是正道”“要主动融入全球创新网络，深化基础研究国际交流合作，联合开展气候变化、能源环境、生命健康等重大科学问题攻关，积极参与全球科技治理”。当前，世界百年未有之大变局加速演进，新一轮科技革命和产业变革深入发展，单边主义、保护主义抬头，冲击全球科技创新。历史和现实表明，科技是全人类共有财富，协同实现基础研究突破，完善全球科技治理体系，塑造开放创新生态，关乎世界科技发展和人类共同未来。习近平总书记的重要论述，深刻揭示了开放合作与自立自强辩证统一的内在逻辑。我们要深入学习贯彻习近平总书记的重要论述，更好统筹国内国际两个大局，以开放合作推动实现高水平科技自立自强。\n\n牵头国际大科学计划，以联合攻关引领基础研究突破。习近平总书记强调：“世界已经进入大科学时代，基础研究组织化程度越来越高”。人类面临的重大科学难题复杂度高、交叉性强、资源投入规模大，单凭一国之力难以系统性破解。实现高水平科技自立自强，绝非自我隔绝、闭门造车，而是要更加主动融入全球创新网络，以高水平开放合作汇聚全球智慧，通过联合攻关学习先进科学理念、集聚顶尖科技人才、共享重大科技设施，取得重大原创性突破。紧扣重大基础科学问题，积极参与和构建多边科技合作机制，在牵头国际大科学计划中彰显中国担当，以中国智慧助力人类科学进步。例如，在地球系统科学领域，稳步推进深时数字地球、海洋负排放等国际大科学计划，围绕地球演化、碳中和、海洋生态修复等重大科学问题联合攻关，为全球气候治理与可持续发展提供科学方案；在能源环境领域，深耕国际子午圈大科学计划，联动全球空间观测资源，构建全域闭环的立体监测体系，精准防范空间灾害隐患，解码日地空间环境演化规律，筑牢全球空间与能源环境安全屏障；在生命健康领域，高标准推进人体蛋白质组导航国际大科学计划，汇聚全球科研力量，旨在绘制和解析人体蛋白质组空间全景图谱，建立人体蛋白质组导航系统；等等。\n\n深度参与全球科技治理，以标准规则塑造国际科技话语权。在新一轮科技革命中，大国科技竞争愈益体现为技术路线、标准规则、创新生态的全方位博弈。实现高水平科技自立自强，既要提升自身科技创新实力，也要主动参与全球科技治理，同世界各国携手打造开放、公平、公正、非歧视的国际科技发展环境。近年来，某些国家将科技问题政治化、工具化、武器化，通过出口管制、标准壁垒构建排他性科技同盟，严重割裂全球创新链条，持续拉大南北发展鸿沟。我们要以开放合作应对科技领域“脱钩断链”风险挑战，以共商共建共享理念重塑全球科技治理体系，为高水平科技自立自强营造良好外部环境。深入实施“一带一路”科技创新行动计划，加强在联合国、上海合作组织、金砖国家等多边框架内的协调配合，大力推动我国优势技术、成熟成果、创新方案走向世界，在国际产业协同、技术共建共享中锻造长板、巩固优势。在战略新兴领域积极参与和发起国际科学技术组织，研判前沿技术发展趋势、深度参与重点领域国际标准体系建设、制定领域技术发展路线图、确立行业创新发展范式，打破少数国家对核心技术路线的垄断，提升我国在全球科技治理中的话语权和影响力。\n\n推动制度型开放实现新突破，以创新要素融通构建开放生态。习近平总书记强调：“自主创新是开放环境下的创新，绝不能关起门来搞，而是要聚四海之气、借八方之力。”实现高水平科技自立自强，需要构建创新要素高效融通、“引进来”与“走出去”双向赋能的国际创新生态，在开放合作中持续提升自主创新能力。开创科技创新对外开放新格局，打通人才、技术、资本、数据跨境流动堵点，在全球创新要素配置中掌握战略主动，将全方位国际合作势能转化为高水平科技自立自强动能。充分发挥国际科学技术组织的枢纽作用，健全我国科研人员赴各类国际科学技术组织任职制度。积极利用世界互联网大会、世界人工智能大会、中国国际进口博览会等国际性平台，常态化开展技术对接、前沿科研交流与创新成果转化等国际合作。充分利用全球创新资源，加快形成具有全球竞争力的开放创新生态，以开放合作推动实现高水平科技自立自强。\n\n（作者为清华大学副校长）", "phrases": ["一带一路", "上海合作", "世界互联", "世界人工", "世界已经", "世界百年", "两个大局", "严重割裂", "中国国际", "为全球气", "为高水平", "之力难以", "也要主动", "习近平总", "书记强调", "书记的重", "了开放合", "交叉性强", "交流与创", "交流合作", "产业变革", "人类共有", "人类面临", "以中国智", "以共商共"], "highlights": [{"text": "科技进步是世界性、时代性课题，唯有开放合作才是正道", "type": "引用"}, {"text": "要主动融入全球创新网络，深化基础研究国际交流合作，联合开展气候变化、能源环境、生命健康等重大科学问题攻关，积极参与全球科技治理", "type": "引用"}, {"text": "世界已经进入大科学时代，基础研究组织化程度越来越高", "type": "引用"}, {"text": "自主创新是开放环境下的创新，绝不能关起门来搞，而是要聚四海之气、借八方之力。", "type": "引用"}, {"text": "当前，世界百年未有之大变局加速演进，新一轮科技革命和产业变革深入发展，单边主义、保护主义抬头，冲击全球科技创新", "type": "排比"}, {"text": "历史和现实表明，科技是全人类共有财富，协同实现基础研究突破，完善全球科技治理体系，塑造开放创新生态，关乎世界科技发展和人类共同未来", "type": "排比"}]}, "民生类": {"title": "敢于追光，自会光芒万丈（中国道路中国梦·青春为中国式现代化挺膺担当55）", "author": "", "pub_date": "", "url": "http://opinion.people.com.cn/n1/2026/0710/c461529-40757155.html", "content": "“黑夜给了我黑色的眼睛，我却用它寻找光明。”对我来说，这不是诗，是走过的路。\n\n6岁那年，我双眼受伤。那场意外夺走的不只是视力，更是一个孩子对未来的想象。当时，我觉得余生都会在痛苦中度过。但就在今年，我在全国残疾人单考单招考试中，以721分的成绩被长春大学录取，将攻读计算机科学与技术、中医专业，成为一名盲人双学位大学生。从黑暗走向光明，是无数双手在托举，是爱、善意与努力的滋养在助力。\n\n最灰暗的日子里，我把自己裹成一个“茧”，拒绝任何陌生人靠近。但一次拥抱，把“茧”撕开了一道缝。我来到武汉市盲童学校那天，张龙老师正带着同学们排练葫芦丝。一曲终了，她俯下身，紧紧抱住我。直到现在，我仍然记得那个拥抱，如此温暖、如此有力。她把我拉进班里，拉进歌声里，拉进“光”里。\n\n我给同学们唱起《小草》：“没有花香，没有树高，我是一棵无人知道的小草。从不寂寞，从不烦恼，你看我的伙伴遍及天涯海角……”唱着唱着，我忽然觉得心里敞亮了些。原来我不是孤身一人，身边有同伴，耳边有和声，我们能在歌声里聚成一团。后来，张龙老师成了我的班主任，我对她的称呼也变为了“张妈妈”。大家教会我，黑暗并不可怕，怕的是连开窗的勇气都没有。只要敢于追光，便能够光芒万丈。\n\n教育部门为我开通绿色通道，解决外省学籍问题，全程免除学杂费、书本费，每月发放生活补助；学校安置家人就业，爸爸做保安、妈妈当生活教师，姐姐也能在本地上学；还有许多爱心基金联系我，持续资助我的学习开销……我身后，是社会的善意，是无数爱心的接力与支撑。我不会忘记，更不会辜负。\n\n我感谢这个时代，感谢科技的飞速发展，让残疾人拥有了前所未有的便利和希望。读屏软件让我能和常人一样浏览网页，导航程序让我能去到想去的地方……技术的进步为我们通向更广阔的天地铺路。上计算机课的时候，我心里慢慢生出一个梦想：毕业以后，要回盲校当一名计算机老师。被光照亮过，所以我也想做那束光，回来守护更多“曾经的自己”，让他们“看”到更远的世界、更美的未来。\n\n在网上，曾刷到同龄的朋友说，日子难，提不起劲。从自己的经历出发，我想说，人生总会有坎，跨不过去是绊脚石，跨过去了就是垫脚石。遭遇挫折后的消极沉沦、彷徨困惑，这种感受，我有深刻体会。但总陷在悲伤里，痛苦就永远是痛苦。颓丧是一生，奋进也是一生，选择权永远在自己手里。\n\n记得刚学盲文时，密密麻麻的点让我无从下手，几度把手指磨出老茧，但一想到那么多人都没有放弃我，我更不能放弃自己。生活在这么好的时代，收获这么多关心与鼓励，有什么理由不奋战到底呢？再努力一点，再勤奋一点，我日复一日地死磕学习，后来不仅能熟读盲文，还可以熟练书写。\n\n到了初高中，英语单词量骤增，便每天再多花2小时背诵巩固；看不到数理化的图示和推导，就在脑中重建空间关系和运算步骤；上解剖学课，就反复触摸模型，一点点记住人体结构组织……困难来了，只管接住它、消化它，所有苦涩终会变为成长的底气。\n\n那些我认识或不认识的，正在彷徨、颓丧的人，别怕眼前的黑，只要心里有光，咱们一定能走出属于自己的光明大道。\n\n（作者为武汉市盲童学校2026届高三毕业生，本报记者田豆豆采访整理）", "phrases": ["一曲终了", "一点点记", "上解剖学", "上计算机", "中医专业", "为我开通", "么好的时", "于自己的", "人生总会", "从不寂寞", "从不烦恼", "从自己的", "从黑暗走", "伙伴遍及", "但一想到", "但一次拥", "但就在今", "但总陷在", "位大学生", "住人体结", "作者为武", "你看我的", "便利和希", "便每天再", "便能够光"], "highlights": [{"text": "黑夜给了我黑色的眼睛，我却用它寻找光明。", "type": "引用"}, {"text": "没有花香，没有树高，我是一棵无人知道的小草。从不寂寞，从不烦恼，你看我的伙伴遍及天涯海角……", "type": "引用"}, {"text": "疾人单考单招考试中，以721分的成绩被长春大学录取，将攻读计算机科学与技术、中医专业，成为一名盲人双学位大学生", "type": "排比"}, {"text": "从不寂寞，从不烦恼，你看我的伙伴遍及天涯海角……”唱着唱着，我忽然觉得心里敞亮了些", "type": "排比"}, {"text": "原来我不是孤身一人，身边有同伴，耳边有和声，我们能在歌声里聚成一团", "type": "排比"}, {"text": "活教师，姐姐也能在本地上学；还有许多爱心基金联系我，持续资助我的学习开销……我身后，是社会的善意，是无数爱心的接力与支撑", "type": "排比"}]}, "生态类": {"title": "壹时评：从“剧本相亲”到“演戏卖茶”，莫让民事纠纷掩盖诈骗本质", "author": "", "pub_date": "", "url": "http://opinion.people.com.cn/n1/2026/0705/c223228-40753630.html", "content": "花六万余元买婚介服务，等来的却是五十元一天雇来的“婚托”；普洱茶直播间里，二十七个“茶农”有二十个是演员，廉价茶叶被包装成天价古树茶大肆售卖。这两起看似毫不相干的乱象，实则暴露出当前部分商业营销中高度趋同的共性问题：披着合法交易的外衣，行系统性诈骗之实。\n\n剥开商业伪装，这两类行为的作案逻辑如出一辙，其共性首先体现在“虚构事实”的诈骗本质上。长期以来，此类乱象常被降格为“民事违约”或“消费纠纷”。然而，违约的前提是机构有真实的履约意愿，只是服务能力未达标。反观“剧本式婚介”与“演戏式卖茶”，从一开始就毫无真实履约的打算。婚介机构将“婚托”包装成优质对象，伪造身份学历；直播团队则编造故事、虚构山头年份，把低成本台地茶溢价数十倍出售。两者均主动捏造关键事实，使受害人陷入错误认知后自愿掏钱，这早已超出了民事欺诈的界限，已涉嫌触犯了以“虚构事实、骗取财物”为核心特征的诈骗罪。\n\n其次，两者的共性还在于精准拿捏人性弱点，定向收割特定群体。不良婚介紧盯大龄单身、离异人群，放大年龄压力与成婚焦虑，诱导其冲动缴纳大额费用；普洱茶骗局则瞄准中老年群体的捡漏心理、收藏执念与同情心，利用大家的善意灌输保值增值概念，一步步引导超额消费。这种利用信息不对称和情感操控的套路，让受害者防不胜防。\n\n我国刑法明确规定，诈骗公私财物数额较大的，处三年以下有期徒刑、拘役或者管制，并处或者单处罚金；数额巨大或者有其他严重情节的，处三年以上十年以下有期徒刑，并处罚金。受害者动辄数万元甚至数十万元的费用，往往已达到刑事立案乃至“数额巨大”的标准。面对明目张胆的“套路”，仅靠行政处罚或民事调解显然构不成威慑。既然涉嫌诈骗，司法就必须“严”字当头，有关执法部门必须一查到底。\n\n骗局万变不离其宗，再精巧的演戏套路，也掩盖不了非法敛财的本质。面对防不胜防的“剧本”陷阱，只有让刑法的牙齿真正咬合，让骗子付出沉重的代价，才能激浊扬清。", "phrases": ["一天雇来", "一查到底", "一步步引", "万元的费", "上十年以", "下有期徒", "不离其宗", "不良婚介", "与同情心", "两者均主", "两者的共", "中老年群", "为核心特", "为的作案", "也掩盖不", "了非法敛", "事调解显", "二十七个", "交易的外", "人性弱点", "仅靠行政", "从一开始", "他严重情", "价数十倍", "伪造身份"], "highlights": [{"text": "等来的却是五十元一天雇来的“婚托”；普洱茶直播间里，二十七个“茶农”有二十个是演员，廉价茶叶被包装成天价古树茶大肆售卖", "type": "排比"}, {"text": "婚介机构将“婚托”包装成优质对象，伪造身份学历；直播团队则编造故事、虚构山头年份，把低成本台地茶溢价数十倍出售", "type": "排比"}, {"text": "茶骗局则瞄准中老年群体的捡漏心理、收藏执念与同情心，利用大家的善意灌输保值增值概念，一步步引导超额消费", "type": "排比"}, {"text": "私财物数额较大的，处三年以下有期徒刑、拘役或者管制，并处或者单处罚金；数额巨大或者有其他严重情节的，处三年以上十年以下有期徒刑，并处罚金", "type": "排比"}, {"text": "骗局万变不离其宗，再精巧的演戏套路，也掩盖不了非法敛财的本质", "type": "排比"}, {"text": "面对防不胜防的“剧本”陷阱，只有让刑法的牙齿真正咬合，让骗子付出沉重的代价，才能激浊扬清", "type": "排比"}]}, "文化类": {"title": "人民锐评：LV“老花”引争议，我们的文化遗产该如何传承保护", "author": "", "pub_date": "", "url": "http://opinion.people.com.cn/n1/2026/0710/c436867-40758036.html", "content": "近期，路易威登（LV）诉茉莉奶白商标侵权案一审宣判，茉莉奶白被判赔1030万元。由于LV的“老花”与中国柿蒂纹、宝相花同源，这一判决引发广泛讨论。\n\n老祖宗留下的东西，我们自己反倒不能用了吗？一个朴素追问让人共情：从中国传统纹样中汲取灵感，通过现代商标制度将其变为独特商标，然后反过来不允许中国本土企业使用中国传统纹样，这合乎情、理、法吗？\n\n显然，公共讨论已超出具体个案，指向文化遗产传承与保护的深层问题，值得深思。\n\n中国传统纹样作为公共文化资源，是全社会共享的文化财富。企业将公共文化资源进行创造性改造、转化为注册商标，是法律所允许的正当权利。\n\n但这种转化，并不能对公共文化资源先占独享。从法理上讲，其中有两条原则须予厘清。\n\n第一条原则是，商标注册不得使公共文化资源被彻底私有化、专属化，更不得据此主张绝对排他的权利。道理并不复杂：如果仅凭在先注册就完全据为己有，这既是对资源公共属性的侵蚀，也是对后来使用者正当权益的剥夺。\n\n第二条原则是，含有公共文化资源、通用文化元素的商标，相较于企业完全独创的商标，其保护强度与保护范围应当有所限缩。若对二者不加区分、同等保护，客观上便是将公共文化资源等同于独创成果，变相助长了私有化、专属化。\n\n对此，我国《商标法》早已明确规定，注册商标中含有本商品的通用名称、图形等要素以及地名，注册商标专用权人无权禁止他人正当使用。这一立场，也是世界各国法治实践的共识。\n\n据相关报道，在欧盟，法院曾认定棋盘格图案自古即有、长期用于装饰艺术，企业不得独占；在美国，法院认为四瓣花系全球通用的装饰元素，不能据为私有；在日本，相关判决表述更为直接：市松方格纹是自江户时代传承的公共文化资产，此类图案通常仅会被消费者视作布料花纹，而非特定品牌标识。\n\n这些裁判指向一个公共认同：守护公共文化资源的公共属性，避免个别大企业以商标之名行独占之实，从而使中小企业与社会公众同样能够获得公共文化资源赋能。\n\n中国是一个法治国家，也一以贯之以法治优化营商环境、维护经济秩序、保障经营主体权益，具体案件也会在现行法律框架下得到公正裁决。\n\n以此为契机看长远，随着中华文化国际影响力越来越大，中国经济体量不断扩大，文化交流交融也将更加深化，更需要我们处理好文化遗产传承和知识产权保护、文化建设和现代法治的关系。\n\n不少国际品牌的标志性图案，都不同程度借鉴中国传统纹样。织密制度网络，为中国传统纹样和美学元素的商用确权划清界限，才能既充分发挥文化遗产的文化价值，又防止钻法律空子将其据为己有。\n\n在人工智能技术快速迭代升级的当下，应探索建立包括传统纹样在内的中华民族传统美学数据库。构筑数据底座，商业使用就会明明白白，抢注、滥用、独占、抄袭等就难以蒙混过关。\n\n中华文明何其悠久博大，留下无数文化瑰宝。我们要提升文化创新创造能力，深入推进中华优秀传统文化创造性转化、创新性发展，用传统美学优化标识设计、提升产品品位、赋能品牌叙事，把深厚的文化优势转变为文化话语权、发展活力源。", "phrases": ["一个朴素", "下的东西", "不加区分", "不少国际", "不得使公", "不能据为", "与中国柿", "与保护的", "专用权人", "业完全独", "个法治国", "中华优秀", "中华文明", "中含有本", "中国传统", "中国是一", "中国本土", "中国经济", "为中国传", "主体权益", "之以法治", "也一以贯", "也会在现", "也是世界", "也是对后"], "highlights": [{"text": "道理并不复杂：如果仅凭在先注册就完全据为己有，这既是对资源公共属性的侵蚀，也是对后来使用者正当权益的剥夺", "type": "排比"}, {"text": "第二条原则是，含有公共文化资源、通用文化元素的商标，相较于企业完全独创的商标，其保护强度与保护范围应当有所限缩", "type": "排比"}, {"text": "若对二者不加区分、同等保护，客观上便是将公共文化资源等同于独创成果，变相助长了私有化、专属化", "type": "排比"}, {"text": "对此，我国《商标法》早已明确规定，注册商标中含有本商品的通用名称、图形等要素以及地名，注册商标专用权人无权禁止他人正当使用", "type": "排比"}, {"text": "更为直接：市松方格纹是自江户时代传承的公共文化资产，此类图案通常仅会被消费者视作布料花纹，而非特定品牌标识", "type": "排比"}, {"text": "度网络，为中国传统纹样和美学元素的商用确权划清界限，才能既充分发挥文化遗产的文化价值，又防止钻法律空子将其据为己有", "type": "排比"}]}, "治理类": {"title": "发展人工智能要守住“三颗心”（e评·人民网观点）", "author": "", "pub_date": "", "url": "http://opinion.people.com.cn/n1/2026/0309/c461529-40677594.html", "content": "今年的政府工作报告提出，“推动重点行业领域人工智能商业化规模化应用”“完善人工智能治理”。\n\n人工智能正在加速融入经济社会发展的“毛细血管”。发展人工智能要守住“三颗心”。\n\n坚守“以人为本”的初心。发展人工智能，要把保障人的安全与权利放在优先位置，以人为中心、有利于人类福祉。应推动人工智能普惠共享，将其打造成造福全人类的公共产品。\n\n坚守“赋能发展”的信心。人工智能被视为继蒸汽机、电力、互联网之后的划时代变革性技术，具有溢出带动性很强的“头雁”效应，要确保技术进步切实转化为真正推动社会进步的生产力。\n\n坚守“科技向善”的决心。人工智能的发展与治理，要将人文关怀、道德伦理与社会责任置于算法效率之前。要加快推进人工智能立法进程，构建全方位、多层次的综合治理体系。\n\n“十五五”规划纲要草案提出，“加强人工智能同科技创新、产业发展、文化建设、民生保障、社会治理相结合”。在发展与治理、创新与安全间找到平衡，人工智能才能更好引领未来。", "phrases": ["与权利放", "与社会责", "互联网之", "产业发展", "人工智能", "人的安全", "人类的公", "今年的政", "代变革性", "以人为中", "以人为本", "任置于算", "全间找到", "具有溢出", "创新与安", "加强人工", "发展人工", "后的划时", "商业化规", "在优先位", "在发展与", "多层次的", "完善人工", "实转化为", "将其打造"], "highlights": [{"text": "推动重点行业领域人工智能商业化规模化应用", "type": "引用"}, {"text": "加强人工智能同科技创新、产业发展、文化建设、民生保障、社会治理相结合", "type": "引用"}, {"text": "被视为继蒸汽机、电力、互联网之后的划时代变革性技术，具有溢出带动性很强的“头雁”效应，要确保技术进步切实转化为真正推动社会进步的生产力", "type": "排比"}]}};var SITE_TODAY_DATE="2026-07-13";var SITE_PHRASES={"words": {"三明医改": {"count": 1, "cats": ["工作作风"]}, "上城市平": {"count": 1, "cats": ["工作作风"]}, "上年同期": {"count": 1, "cats": ["工作作风"]}, "上更好的": {"count": 1, "cats": ["工作作风"]}, "中不断增": {"count": 1, "cats": ["工作作风"]}, "中国式现": {"count": 1, "cats": ["工作作风"]}, "中国式现代化": {"count": 1, "cats": ["工作作风"]}, "中央坚强": {"count": 1, "cats": ["工作作风"]}, "为了人民": {"count": 1, "cats": ["工作作风"]}, "为推进中": {"count": 1, "cats": ["工作作风"]}, "为明显的": {"count": 1, "cats": ["工作作风"]}, "为经济延": {"count": 1, "cats": ["工作作风"]}, "为高质量": {"count": 1, "cats": ["工作作风"]}, "也引导居": {"count": 1, "cats": ["工作作风"]}, "也是发展": {"count": 1, "cats": ["工作作风"]}, "习近平总": {"count": 3, "cats": ["工作作风", "党的建设", "科技创新"]}, "乡居民生": {"count": 1, "cats": ["工作作风"]}, "书记指出": {"count": 1, "cats": ["工作作风"]}, "互为条件": {"count": 1, "cats": ["工作作风"]}, "人民共同": {"count": 1, "cats": ["工作作风"]}, "人民群众": {"count": 1, "cats": ["工作作风"]}, "今年上半": {"count": 1, "cats": ["工作作风"]}, "今年以来": {"count": 1, "cats": ["工作作风"]}, "代化的重": {"count": 1, "cats": ["工作作风"]}, "以克服的": {"count": 1, "cats": ["工作作风"]}, "一个大党": {"count": 1, "cats": ["党的建设"]}, "一个大国": {"count": 1, "cats": ["党的建设"]}, "一体推进": {"count": 1, "cats": ["党的建设"]}, "一场输不": {"count": 1, "cats": ["党的建设"]}, "一条在党": {"count": 1, "cats": ["党的建设"]}, "一步不停": {"count": 1, "cats": ["党的建设"]}, "不变味的": {"count": 1, "cats": ["党的建设"]}, "不敢腐不": {"count": 1, "cats": ["党的建设"]}, "不敢腐不能腐不想腐": {"count": 1, "cats": ["党的建设"]}, "不断提高": {"count": 1, "cats": ["党的建设"]}, "不断筑牢": {"count": 1, "cats": ["党的建设"]}, "不正之风": {"count": 1, "cats": ["党的建设"]}, "不负十四": {"count": 1, "cats": ["党的建设"]}, "业发展进": {"count": 1, "cats": ["党的建设"]}, "两个仍然": {"count": 1, "cats": ["党的建设"]}, "严惩风腐": {"count": 1, "cats": ["党的建设"]}, "个人及其": {"count": 1, "cats": ["党的建设"]}, "中央纪委": {"count": 1, "cats": ["党的建设"]}, "中央集中": {"count": 1, "cats": ["党的建设"]}, "为乱作为": {"count": 1, "cats": ["党的建设"]}, "为强国建": {"count": 1, "cats": ["党的建设"]}, "为纵深推": {"count": 1, "cats": ["党的建设"]}, "也是引领": {"count": 1, "cats": ["党的建设"]}, "书记准确": {"count": 1, "cats": ["党的建设"]}, "一些欧美": {"count": 1, "cats": ["经济建设"]}, "一以贯之": {"count": 1, "cats": ["经济建设"]}, "一张蓝图": {"count": 1, "cats": ["经济建设"]}, "一步步变": {"count": 1, "cats": ["经济建设"]}, "七年行动": {"count": 1, "cats": ["经济建设"]}, "上规模最": {"count": 1, "cats": ["经济建设"]}, "上调中国": {"count": 1, "cats": ["经济建设"]}, "下调全球": {"count": 1, "cats": ["经济建设"]}, "不断夯实": {"count": 1, "cats": ["经济建设"]}, "不确定环": {"count": 1, "cats": ["经济建设"]}, "与天下同": {"count": 1, "cats": ["经济建设"]}, "世界变乱": {"count": 1, "cats": ["经济建设"]}, "世界经济": {"count": 1, "cats": ["经济建设"]}, "世界银行": {"count": 1, "cats": ["经济建设"]}, "业生态和": {"count": 1, "cats": ["经济建设"]}, "业的粮食": {"count": 1, "cats": ["经济建设"]}, "中东冲突": {"count": 1, "cats": ["经济建设"]}, "中国会设": {"count": 1, "cats": ["经济建设"]}, "中国光伏": {"count": 1, "cats": ["经济建设"]}, "中国则选": {"count": 1, "cats": ["经济建设"]}, "中国却成": {"count": 1, "cats": ["经济建设"]}, "中国已成": {"count": 1, "cats": ["经济建设"]}, "中国的确": {"count": 1, "cats": ["经济建设"]}, "中国的重": {"count": 1, "cats": ["经济建设"]}, "中国经济": {"count": 2, "cats": ["经济建设", "文化建设"]}, "一带一路": {"count": 1, "cats": ["科技创新"]}, "上海合作": {"count": 1, "cats": ["科技创新"]}, "世界互联": {"count": 1, "cats": ["科技创新"]}, "世界人工": {"count": 1, "cats": ["科技创新"]}, "世界已经": {"count": 1, "cats": ["科技创新"]}, "世界百年": {"count": 1, "cats": ["科技创新"]}, "两个大局": {"count": 1, "cats": ["科技创新"]}, "严重割裂": {"count": 1, "cats": ["科技创新"]}, "中国国际": {"count": 1, "cats": ["科技创新"]}, "为全球气": {"count": 1, "cats": ["科技创新"]}, "为高水平": {"count": 1, "cats": ["科技创新"]}, "之力难以": {"count": 1, "cats": ["科技创新"]}, "也要主动": {"count": 1, "cats": ["科技创新"]}, "书记强调": {"count": 1, "cats": ["科技创新"]}, "书记的重": {"count": 1, "cats": ["科技创新"]}, "了开放合": {"count": 1, "cats": ["科技创新"]}, "交叉性强": {"count": 1, "cats": ["科技创新"]}, "交流与创": {"count": 1, "cats": ["科技创新"]}, "交流合作": {"count": 1, "cats": ["科技创新"]}, "产业变革": {"count": 1, "cats": ["科技创新"]}, "人类共有": {"count": 1, "cats": ["科技创新"]}, "人类面临": {"count": 1, "cats": ["科技创新"]}, "以中国智": {"count": 1, "cats": ["科技创新"]}, "以共商共": {"count": 1, "cats": ["科技创新"]}, "一曲终了": {"count": 1, "cats": ["民生保障"]}, "一点点记": {"count": 1, "cats": ["民生保障"]}, "上解剖学": {"count": 1, "cats": ["民生保障"]}, "上计算机": {"count": 1, "cats": ["民生保障"]}, "中医专业": {"count": 1, "cats": ["民生保障"]}, "为我开通": {"count": 1, "cats": ["民生保障"]}, "么好的时": {"count": 1, "cats": ["民生保障"]}, "于自己的": {"count": 1, "cats": ["民生保障"]}, "人生总会": {"count": 1, "cats": ["民生保障"]}, "从不寂寞": {"count": 1, "cats": ["民生保障"]}, "从不烦恼": {"count": 1, "cats": ["民生保障"]}, "从自己的": {"count": 1, "cats": ["民生保障"]}, "从黑暗走": {"count": 1, "cats": ["民生保障"]}, "伙伴遍及": {"count": 1, "cats": ["民生保障"]}, "但一想到": {"count": 1, "cats": ["民生保障"]}, "但一次拥": {"count": 1, "cats": ["民生保障"]}, "但就在今": {"count": 1, "cats": ["民生保障"]}, "但总陷在": {"count": 1, "cats": ["民生保障"]}, "位大学生": {"count": 1, "cats": ["民生保障"]}, "住人体结": {"count": 1, "cats": ["民生保障"]}, "作者为武": {"count": 1, "cats": ["民生保障"]}, "你看我的": {"count": 1, "cats": ["民生保障"]}, "便利和希": {"count": 1, "cats": ["民生保障"]}, "便每天再": {"count": 1, "cats": ["民生保障"]}, "便能够光": {"count": 1, "cats": ["民生保障"]}, "一天雇来": {"count": 1, "cats": ["生态文明"]}, "一查到底": {"count": 1, "cats": ["生态文明"]}, "一步步引": {"count": 1, "cats": ["生态文明"]}, "万元的费": {"count": 1, "cats": ["生态文明"]}, "上十年以": {"count": 1, "cats": ["生态文明"]}, "下有期徒": {"count": 1, "cats": ["生态文明"]}, "不离其宗": {"count": 1, "cats": ["生态文明"]}, "不良婚介": {"count": 1, "cats": ["生态文明"]}, "与同情心": {"count": 1, "cats": ["生态文明"]}, "两者均主": {"count": 1, "cats": ["生态文明"]}, "两者的共": {"count": 1, "cats": ["生态文明"]}, "中老年群": {"count": 1, "cats": ["生态文明"]}, "为核心特": {"count": 1, "cats": ["生态文明"]}, "为的作案": {"count": 1, "cats": ["生态文明"]}, "也掩盖不": {"count": 1, "cats": ["生态文明"]}, "了非法敛": {"count": 1, "cats": ["生态文明"]}, "事调解显": {"count": 1, "cats": ["生态文明"]}, "二十七个": {"count": 1, "cats": ["生态文明"]}, "交易的外": {"count": 1, "cats": ["生态文明"]}, "人性弱点": {"count": 1, "cats": ["生态文明"]}, "仅靠行政": {"count": 1, "cats": ["生态文明"]}, "从一开始": {"count": 1, "cats": ["生态文明"]}, "他严重情": {"count": 1, "cats": ["生态文明"]}, "价数十倍": {"count": 1, "cats": ["生态文明"]}, "伪造身份": {"count": 1, "cats": ["生态文明"]}, "一个朴素": {"count": 1, "cats": ["文化建设"]}, "下的东西": {"count": 1, "cats": ["文化建设"]}, "不加区分": {"count": 1, "cats": ["文化建设"]}, "不少国际": {"count": 1, "cats": ["文化建设"]}, "不得使公": {"count": 1, "cats": ["文化建设"]}, "不能据为": {"count": 1, "cats": ["文化建设"]}, "与中国柿": {"count": 1, "cats": ["文化建设"]}, "与保护的": {"count": 1, "cats": ["文化建设"]}, "专用权人": {"count": 1, "cats": ["文化建设"]}, "业完全独": {"count": 1, "cats": ["文化建设"]}, "个法治国": {"count": 1, "cats": ["文化建设"]}, "中华优秀": {"count": 1, "cats": ["文化建设"]}, "中华文明": {"count": 1, "cats": ["文化建设"]}, "中含有本": {"count": 1, "cats": ["文化建设"]}, "中国传统": {"count": 1, "cats": ["文化建设"]}, "中国是一": {"count": 1, "cats": ["文化建设"]}, "中国本土": {"count": 1, "cats": ["文化建设"]}, "为中国传": {"count": 1, "cats": ["文化建设"]}, "主体权益": {"count": 1, "cats": ["文化建设"]}, "之以法治": {"count": 1, "cats": ["文化建设"]}, "也一以贯": {"count": 1, "cats": ["文化建设"]}, "也会在现": {"count": 1, "cats": ["文化建设"]}, "也是世界": {"count": 1, "cats": ["文化建设"]}, "也是对后": {"count": 1, "cats": ["文化建设"]}, "与权利放": {"count": 1, "cats": ["社会治理"]}, "与社会责": {"count": 1, "cats": ["社会治理"]}, "互联网之": {"count": 1, "cats": ["社会治理"]}, "产业发展": {"count": 1, "cats": ["社会治理"]}, "人工智能": {"count": 1, "cats": ["社会治理"]}, "人的安全": {"count": 1, "cats": ["社会治理"]}, "人类的公": {"count": 1, "cats": ["社会治理"]}, "今年的政": {"count": 1, "cats": ["社会治理"]}, "代变革性": {"count": 1, "cats": ["社会治理"]}, "以人为中": {"count": 1, "cats": ["社会治理"]}, "以人为本": {"count": 1, "cats": ["社会治理"]}, "任置于算": {"count": 1, "cats": ["社会治理"]}, "全间找到": {"count": 1, "cats": ["社会治理"]}, "具有溢出": {"count": 1, "cats": ["社会治理"]}, "创新与安": {"count": 1, "cats": ["社会治理"]}, "加强人工": {"count": 1, "cats": ["社会治理"]}, "发展人工": {"count": 1, "cats": ["社会治理"]}, "后的划时": {"count": 1, "cats": ["社会治理"]}, "商业化规": {"count": 1, "cats": ["社会治理"]}, "在优先位": {"count": 1, "cats": ["社会治理"]}, "在发展与": {"count": 1, "cats": ["社会治理"]}, "多层次的": {"count": 1, "cats": ["社会治理"]}, "完善人工": {"count": 1, "cats": ["社会治理"]}, "实转化为": {"count": 1, "cats": ["社会治理"]}, "将其打造": {"count": 1, "cats": ["社会治理"]}}, "highlights": {"抓改革、促发展，归根到底就是为了让人民过上更好的日子。": {"count": 1, "type": "引用", "cats": ["工作作风"]}, "在发展中保障和改善民生是中国式现代化的重大任务。": {"count": 1, "type": "引用", "cats": ["工作作风"]}, "的物质基础，通过不断保障和改善民生创造更多有效需求，对于巩固和增强经济回升向好态势，以高质量发展全面推进中国式现代化，意义重大": {"count": 1, "type": "排比", "cats": ["工作作风"]}, "今年以来，在以习近平同志为核心的党中央坚强领导下，各地区各部门坚持在发展中稳步提升民生保障水平，在推动高质量发展中不断增进民生福祉": {"count": 1, "type": "排比", "cats": ["工作作风"]}, "紧抓在手上，更好满足人民群众多样化、高品质消费需要，能够更好释放内需潜力、激发产业升级活力，为高质量发展注入强劲动力": {"count": 1, "type": "排比", "cats": ["工作作风"]}, "推进中国式现代化，实现全体人民共同富裕，归根到底要靠高质量发展": {"count": 1, "type": "排比", "cats": ["工作作风"]}, "腐败是党和国家事业发展进程中的拦路虎、绊脚石，反腐败是一场输不起也决不能输的重大斗争。": {"count": 1, "type": "引用", "cats": ["党的建设"]}, "管党治党越有效，经济社会发展的保障就越有力。": {"count": 1, "type": "引用", "cats": ["党的建设"]}, "当前，反腐败斗争形势仍然严峻复杂，铲除腐败滋生土壤和条件任务仍然艰巨繁重。": {"count": 1, "type": "引用", "cats": ["党的建设"]}, "我其实违法犯罪，都是从吃喝问题，从违反（中央）八项规定（精神）开始的": {"count": 1, "type": "引用", "cats": ["党的建设"]}, "近平总书记准确把握反腐败斗争形势任务以及阶段性特征，部署以更高标准、更实举措推进全面从严治党，强调“更加清醒坚定地推进反腐败斗争”": {"count": 1, "type": "排比", "cats": ["党的建设"]}, "放眼全世界，只有中国共产党能够做到，这是我们党的显著优势，也是引领时代的制胜之道": {"count": 1, "type": "排比", "cats": ["党的建设"]}, "中国会设定明确目标，并构建稳定的政策基础设施，以支持实现目标": {"count": 1, "type": "引用", "cats": ["经济建设"]}, "是工业的粮食、经济的命脉，此次国际油气价格剧烈波动，我国能源体系展现出强大抗风险能力，有力保障了经济平稳运行和民生需求": {"count": 1, "type": "排比", "cats": ["经济建设"]}, "看大势，国际能源安全问题日趋复杂，作为全球最大能源消费国和进口国，我们必须有效降低对外依存度": {"count": 1, "type": "排比", "cats": ["经济建设"]}, "“七年行动计划”，再到形成自主深水油气开发技术体系，近年来，我国能源自给率稳步提升，以巩固自身能源的确定性应对外部形势的不确定性": {"count": 1, "type": "排比", "cats": ["经济建设"]}, "相比之下，去年迎峰度夏期间，我国最大电力负荷4次创新高，全国电力供应平稳有序，经受住了高温考验": {"count": 1, "type": "排比", "cats": ["经济建设"]}, "当外界感叹“人工智能的尽头是电力”时，中国已成为全球首个重要“电力国家”，以澎湃电能支撑国产人工智能站上第一梯队": {"count": 1, "type": "排比", "cats": ["经济建设"]}, "科技进步是世界性、时代性课题，唯有开放合作才是正道": {"count": 1, "type": "引用", "cats": ["科技创新"]}, "要主动融入全球创新网络，深化基础研究国际交流合作，联合开展气候变化、能源环境、生命健康等重大科学问题攻关，积极参与全球科技治理": {"count": 1, "type": "引用", "cats": ["科技创新"]}, "世界已经进入大科学时代，基础研究组织化程度越来越高": {"count": 1, "type": "引用", "cats": ["科技创新"]}, "自主创新是开放环境下的创新，绝不能关起门来搞，而是要聚四海之气、借八方之力。": {"count": 1, "type": "引用", "cats": ["科技创新"]}, "当前，世界百年未有之大变局加速演进，新一轮科技革命和产业变革深入发展，单边主义、保护主义抬头，冲击全球科技创新": {"count": 1, "type": "排比", "cats": ["科技创新"]}, "历史和现实表明，科技是全人类共有财富，协同实现基础研究突破，完善全球科技治理体系，塑造开放创新生态，关乎世界科技发展和人类共同未来": {"count": 1, "type": "排比", "cats": ["科技创新"]}, "黑夜给了我黑色的眼睛，我却用它寻找光明。": {"count": 1, "type": "引用", "cats": ["民生保障"]}, "没有花香，没有树高，我是一棵无人知道的小草。从不寂寞，从不烦恼，你看我的伙伴遍及天涯海角……": {"count": 1, "type": "引用", "cats": ["民生保障"]}, "疾人单考单招考试中，以721分的成绩被长春大学录取，将攻读计算机科学与技术、中医专业，成为一名盲人双学位大学生": {"count": 1, "type": "排比", "cats": ["民生保障"]}, "从不寂寞，从不烦恼，你看我的伙伴遍及天涯海角……”唱着唱着，我忽然觉得心里敞亮了些": {"count": 1, "type": "排比", "cats": ["民生保障"]}, "原来我不是孤身一人，身边有同伴，耳边有和声，我们能在歌声里聚成一团": {"count": 1, "type": "排比", "cats": ["民生保障"]}, "活教师，姐姐也能在本地上学；还有许多爱心基金联系我，持续资助我的学习开销……我身后，是社会的善意，是无数爱心的接力与支撑": {"count": 1, "type": "排比", "cats": ["民生保障"]}, "等来的却是五十元一天雇来的“婚托”；普洱茶直播间里，二十七个“茶农”有二十个是演员，廉价茶叶被包装成天价古树茶大肆售卖": {"count": 1, "type": "排比", "cats": ["生态文明"]}, "婚介机构将“婚托”包装成优质对象，伪造身份学历；直播团队则编造故事、虚构山头年份，把低成本台地茶溢价数十倍出售": {"count": 1, "type": "排比", "cats": ["生态文明"]}, "茶骗局则瞄准中老年群体的捡漏心理、收藏执念与同情心，利用大家的善意灌输保值增值概念，一步步引导超额消费": {"count": 1, "type": "排比", "cats": ["生态文明"]}, "私财物数额较大的，处三年以下有期徒刑、拘役或者管制，并处或者单处罚金；数额巨大或者有其他严重情节的，处三年以上十年以下有期徒刑，并处罚金": {"count": 1, "type": "排比", "cats": ["生态文明"]}, "骗局万变不离其宗，再精巧的演戏套路，也掩盖不了非法敛财的本质": {"count": 1, "type": "排比", "cats": ["生态文明"]}, "面对防不胜防的“剧本”陷阱，只有让刑法的牙齿真正咬合，让骗子付出沉重的代价，才能激浊扬清": {"count": 1, "type": "排比", "cats": ["生态文明"]}, "道理并不复杂：如果仅凭在先注册就完全据为己有，这既是对资源公共属性的侵蚀，也是对后来使用者正当权益的剥夺": {"count": 1, "type": "排比", "cats": ["文化建设"]}, "第二条原则是，含有公共文化资源、通用文化元素的商标，相较于企业完全独创的商标，其保护强度与保护范围应当有所限缩": {"count": 1, "type": "排比", "cats": ["文化建设"]}, "若对二者不加区分、同等保护，客观上便是将公共文化资源等同于独创成果，变相助长了私有化、专属化": {"count": 1, "type": "排比", "cats": ["文化建设"]}, "对此，我国《商标法》早已明确规定，注册商标中含有本商品的通用名称、图形等要素以及地名，注册商标专用权人无权禁止他人正当使用": {"count": 1, "type": "排比", "cats": ["文化建设"]}, "更为直接：市松方格纹是自江户时代传承的公共文化资产，此类图案通常仅会被消费者视作布料花纹，而非特定品牌标识": {"count": 1, "type": "排比", "cats": ["文化建设"]}, "度网络，为中国传统纹样和美学元素的商用确权划清界限，才能既充分发挥文化遗产的文化价值，又防止钻法律空子将其据为己有": {"count": 1, "type": "排比", "cats": ["文化建设"]}, "推动重点行业领域人工智能商业化规模化应用": {"count": 1, "type": "引用", "cats": ["社会治理"]}, "加强人工智能同科技创新、产业发展、文化建设、民生保障、社会治理相结合": {"count": 1, "type": "引用", "cats": ["社会治理"]}, "被视为继蒸汽机、电力、互联网之后的划时代变革性技术，具有溢出带动性很强的“头雁”效应，要确保技术进步切实转化为真正推动社会进步的生产力": {"count": 1, "type": "排比", "cats": ["社会治理"]}}, "totalDates": 11, "totalArticles": 115, "updated": "2026-07-13T19:21:41.917809"};</script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="/" class="site-brand" onclick="App.goHome();return false">
+      <span class="brand-title">申论议论文</span>
+      <span class="brand-sub">每日精选</span>
+    </a>
+    <nav class="nav-links">
+      <a href="/" data-view="today" class="active">今日</a>
+      <a href="/archive" data-view="archive">归档</a>
+      <a href="/search" data-view="search">搜索</a>
+      <a href="/phrases" data-view="phrases">好词金句</a>
+    </nav>
+  </div>
+</header>
+
+<main class="main-content" id="main-content"></main>
+
+<footer class="site-footer">
+  <div class="footer-brand">申论议论文 · 每日精选</div>
+  <div>来源：人民网 · 观点频道 ｜ 仅供学习使用 ｜ 2026-07-13 19:21</div>
+</footer>
+
+<script>/* ═══════════════════════════════════════════════════════════
+   申论议论文 · 每日精选 — 应用逻辑
+   ═══════════════════════════════════════════════════════════ */
+
+(function() {
+'use strict';
+
+// ── State ──
+const STATE = {
+  view: 'today',
+  date: null,
+  catFilter: 'all',
+};
+
+// ── Helpers ──
+function qs(sel, ctx) { return (ctx || document).querySelector(sel); }
+function qsa(sel, ctx) { return (ctx || document).querySelectorAll(sel); }
+function todaySlug(d) { return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
+
+const CAT_KEYS = ['作风类','党建类','经济类','科技类','民生类','生态类','文化类','治理类'];
+const CAT_CONFIG = {
+  '作风类': { label: '工作作风', color: '#C00000' },
+  '党建类': { label: '党的建设', color: '#8B0000' },
+  '经济类': { label: '经济建设', color: '#0070C0' },
+  '科技类': { label: '科技创新', color: '#7030A0' },
+  '民生类': { label: '民生保障', color: '#00884A' },
+  '生态类': { label: '生态文明', color: '#385723' },
+  '文化类': { label: '文化建设', color: '#B8860B' },
+  '治理类': { label: '社会治理', color: '#404040' },
+};
+
+function catInfo(cat) { return CAT_CONFIG[cat] || { label: cat, color: '#666' }; }
+
+function extractExcerpt(text, len) {
+  if (!text) return '';
+  return text.replace(/\s+/g, '').slice(0, len || 90);
+}
+
+// ── Render: Today/Latest Articles ──
+function renderToday(dateKey) {
+  // Try embedded data first
+  let data = null;
+  const slug = dateKey || null;
+
+  if (!slug && window.SITE_TODAY) {
+    data = window.SITE_TODAY;
+  } else if (slug && window.SITE_TODAY && slug === (window.SITE_TODAY_DATE || todaySlug(new Date()))) {
+    data = window.SITE_TODAY;
+  }
+
+  // If data is available (embedded), render immediately
+  if (data) { return renderArticleCards(data, slug); }
+
+  // Otherwise, fetch from JSON
+  const fetchSlug = slug || todaySlug(new Date());
+  return fetch(`data/${fetchSlug}.json`)
+    .then(r => r.json())
+    .then(data => renderArticleCards(data, slug))
+    .catch(() => '<div class="empty-state"><div class="empty-icon">📭</div><h3>暂无文章数据</h3><p>请稍后刷新或检查网络连接</p></div>');
+}
+
+function renderArticleCards(data, dateKey) {
+  if (!data || Object.keys(data).length === 0) {
+    return '<div class="empty-state"><div class="empty-icon">📄</div><h3>今日暂无文章</h3><p>每日议论文将在上午自动更新</p></div>';
+  }
+
+  const entries = Object.entries(data);
+
+  // Filter by category if active
+  const filtered = STATE.catFilter === 'all'
+    ? entries
+    : entries.filter(([cat]) => cat === STATE.catFilter);
+
+  // Category nav
+  const catNavHTML = `
+    <div class="cat-nav">
+      <button class="${STATE.catFilter === 'all' ? 'active' : ''}" onclick="App.filterCat('all')">全部</button>
+      ${CAT_KEYS.map(cat => {
+        const info = catInfo(cat);
+        const active = STATE.catFilter === cat ? 'active' : '';
+        return `<button class="${active}" style="${active ? 'background:'+info.color+';border-color:'+info.color : ''}" onclick="App.filterCat('${cat}')">${info.label}</button>`;
+      }).join('')}
+    </div>`;
+
+  const cardsHTML = filtered.map(([cat, art]) => {
+    const info = catInfo(cat);
+    const title = art.title || '';
+    const body = art.content || '';
+    const phraseCount = (art.phrases || []).length;
+    const hlCount = (art.highlights || []).length;
+
+    return `
+      <article class="article-card" onclick="App.openArticle('${dateKey || todaySlug(new Date())}','${cat}')">
+        <div class="card-top-bar" style="background:${info.color}"></div>
+        <div class="card-body">
+          <div class="card-category" style="color:${info.color}">${info.label}</div>
+          <h3 class="card-title">${title}</h3>
+          <p class="card-excerpt">${extractExcerpt(body)}</p>
+        </div>
+        <div class="card-footer">
+          ${phraseCount > 0 ? `<span class="badge">📝 好词 ${phraseCount}</span>` : ''}
+          ${hlCount > 0 ? `<span class="badge">✨ 金句 ${hlCount}</span>` : ''}
+          ${art.pub_date ? `<span>${art.pub_date}</span>` : ''}
+        </div>
+      </article>`;
+  }).join('');
+
+  // Date banner if viewing a specific date
+  const dayLabel = dateKey ? `📅 ${dateKey}` : '📰 今日精选';
+
+  return `
+    <div class="today-banner">
+      <div>
+        <span class="today-date">${dayLabel}</span>
+        <span class="today-weekday">${getWeekday(dateKey)}</span>
+      </div>
+      <div class="today-meta">
+        <span>📄 ${entries.length} 篇</span>
+        ${filtered.length !== entries.length ? `<span>筛选: ${filtered.length} 篇</span>` : ''}
+      </div>
+    </div>
+    ${catNavHTML}
+    <div class="articles-grid">${cardsHTML}</div>
+  `;
+}
+
+function getWeekday(dateKey) {
+  if (!dateKey) {
+    const now = new Date();
+    const days = ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'];
+    return days[now.getDay()];
+  }
+  const [y, m, d] = dateKey.split('-').map(Number);
+  const days = ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'];
+  return days[new Date(y, m-1, d).getDay()];
+}
+
+// ── Reading Overlay ──
+function openArticle(dateKey, cat) {
+  // Get data from embedded or fetch
+  const dataSource = (!dateKey || dateKey === (window.SITE_TODAY_DATE || todaySlug(new Date())))
+    ? window.SITE_TODAY
+    : null;
+
+  function showArticle(data) {
+    const art = data && data[cat];
+    if (!art) return;
+
+    const info = catInfo(cat);
+    const phrases = art.phrases || [];
+    const highlights = art.highlights || [];
+    const bodyParas = (art.content || '').split('\n\n').filter(p => p.trim().length > 2);
+
+    const overlay = document.createElement('div');
+    overlay.className = 'reading-overlay';
+
+    let extrasHTML = '';
+    if (phrases.length || highlights.length) {
+      extrasHTML = `
+        <div class="reading-extras">
+          <h4>✨ 本文好词金句</h4>
+          ${phrases.length ? '<div class="word-tags">' + phrases.slice(0,20).map(w => `<span class="word-tag">${w}</span>`).join('') + '</div>' : ''}
+          ${highlights.length ? highlights.slice(0,8).map(h => `
+            <div class="golden-sentence">
+              <span class="gs-type">${h.type}</span>${h.text}
+            </div>
+          `).join('') : ''}
+        </div>`;
+    }
+
+    overlay.innerHTML = `
+      <div class="reading-panel">
+        <div class="reading-header">
+          <span class="cat-badge" style="background:${info.color}">${info.label}</span>
+          <span class="reading-title">${art.title || ''}</span>
+          <button class="close-btn" onclick="this.closest('.reading-overlay').remove()" title="关闭">✕</button>
+        </div>
+        <div class="reading-meta">
+          ${art.author ? '<span>👤 ' + art.author + '</span>' : ''}
+          ${art.pub_date ? '<span>📅 ' + art.pub_date + '</span>' : ''}
+          ${art.url ? '<a href="' + art.url + '" target="_blank" rel="noopener">🔗 原文链接</a>' : ''}
+        </div>
+        <div class="reading-body">
+          ${bodyParas.map(p => `<p>${p.trim()}</p>`).join('\n')}
+        </div>
+        ${extrasHTML}
+        <div class="reading-controls">
+          <button onclick="this.closest('.reading-overlay').remove()">关闭</button>
+          ${art.url ? `<button onclick="navigator.clipboard.writeText('${art.url.replace(/'/g,"\\'")}')">复制链接</button>` : ''}
+        </div>
+      </div>
+    `;
+
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay) overlay.remove();
+    });
+    document.body.appendChild(overlay);
+    document.body.style.overflow = 'hidden';
+    const origRemove = overlay.remove.bind(overlay);
+    overlay.remove = function() {
+      document.body.style.overflow = '';
+      origRemove();
+    };
+  }
+
+  if (dataSource) {
+    showArticle(dataSource);
+  } else {
+    fetch(`data/${dateKey}.json`)
+      .then(r => r.json())
+      .then(showArticle)
+      .catch(() => console.error('Failed to load article data'));
+  }
+}
+
+// ── Archive View ──
+function renderArchive() {
+  // Load manifest
+  return fetch('data/manifest.json')
+    .then(r => r.json())
+    .then(manifest => {
+      const dates = Object.keys(manifest.dates || {}).sort().reverse();
+      const totalArticles = Object.values(manifest.dates || {}).reduce((s, c) => s + c, 0);
+
+      if (dates.length === 0) {
+        return '<div class="empty-state"><div class="empty-icon">📚</div><h3>归档为空</h3><p>文章将在每日更新后自动归档</p></div>';
+      }
+
+      // Group by year-month
+      const groups = {};
+      dates.forEach(slug => {
+        const [y, m] = slug.split('-');
+        const ym = y + '-' + m;
+        if (!groups[ym]) groups[ym] = [];
+        groups[ym].push({ slug, count: manifest.dates[slug] || 0 });
+      });
+
+      const years = {};
+      Object.entries(groups).forEach(([ym, items]) => {
+        const y = ym.split('-')[0];
+        if (!years[y]) years[y] = [];
+        years[y].push({ ym, items });
+      });
+
+      return `
+        <div class="archive-header">
+          <h2>📚 文章归档</h2>
+          <div class="archive-stats">共 ${dates.length} 天 · ${totalArticles} 篇文章</div>
+        </div>
+        ${Object.entries(years).sort((a,b) => b[0]-a[0]).map(([year, months]) => `
+          <div class="year-section">
+            <h3>${year} 年</h3>
+            ${months.sort((a,b) => b.ym.localeCompare(a.ym)).map(m => `
+              <div class="month-section">
+                <h4>${m.ym.split('-')[1]} 月</h4>
+                <div class="date-grid">
+                  ${m.items.sort((a,b) => b.slug.localeCompare(a.slug)).map(d => `
+                    <a class="date-card" onclick="App.viewDate('${d.slug}')" title="${d.slug} · ${d.count} 篇">
+                      <span class="day-number">${d.slug.split('-')[2]}</span>
+                      <span class="day-info">${d.count} 篇</span>
+                    </a>
+                  `).join('')}
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        `).join('')}
+      `;
+    })
+    .catch(() => '<div class="empty-state"><div class="empty-icon">📚</div><h3>加载失败</h3><p>请检查网络连接</p></div>');
+}
+
+// ── Search View ──
+function renderSearch(query) {
+  if (!query) {
+    return `
+      <div class="search-container">
+        <h2 style="margin-bottom:20px">🔍 搜索文章</h2>
+        <div class="search-input-wrap">
+          <span class="search-icon">🔍</span>
+          <input class="search-input" type="text" placeholder="输入关键词搜索..." onkeyup="App.doSearch(this.value)" autofocus>
+        </div>
+        <div class="search-results" id="search-results"></div>
+      </div>`;
+  }
+
+  // Load manifest and search through all articles
+  return fetch('data/manifest.json')
+    .then(r => r.json())
+    .then(manifest => {
+      const dates = Object.keys(manifest.dates || {}).sort().reverse();
+      const searchLower = query.toLowerCase();
+
+      // Search through embedded data + manifest
+      const results = [];
+
+      // Check today's data first
+      if (window.SITE_TODAY) {
+        Object.entries(window.SITE_TODAY).forEach(([cat, art]) => {
+          if (matchArticle(art, searchLower)) {
+            results.push({
+              date: window.SITE_TODAY_DATE || todaySlug(new Date()),
+              cat, art,
+            });
+          }
+        });
+      }
+
+      // Also check a few recent dates for matching titles (from manifest)
+      // For simplicity, we'll show the search UI and let users browse
+      if (results.length === 0) {
+        return `
+          <div class="search-container">
+            <h2 style="margin-bottom:20px">🔍 搜索文章</h2>
+            <div class="search-input-wrap">
+              <span class="search-icon">🔍</span>
+              <input class="search-input" type="text" placeholder="输入关键词搜索..." value="${escapeHtml(query)}" onkeyup="App.doSearch(this.value)" autofocus>
+            </div>
+            <div class="search-results" id="search-results">
+              <div class="empty-state"><div class="empty-icon">🔍</div><h3>今日文章中未找到 "${escapeHtml(query)}"</h3><p>搜索功能将随文章积累逐步完善</p></div>
+            </div>
+          </div>`;
+      }
+
+      const resultsHTML = results.map(r => {
+        const info = catInfo(r.cat);
+        const title = r.art.title || '';
+        const body = r.art.content || '';
+        const highlighted = highlightText(extractExcerpt(body, 120), searchLower);
+
+        return `
+          <div class="search-result" onclick="App.openArticle('${r.date}','${r.cat}')">
+            <div class="sr-cat" style="color:${info.color}">${info.label}</div>
+            <div class="sr-title">${highlightText(title, searchLower)}</div>
+            <div class="sr-excerpt">${highlighted}</div>
+            <div class="sr-date">📅 ${r.date}</div>
+          </div>`;
+      }).join('');
+
+      return `
+        <div class="search-container">
+          <h2 style="margin-bottom:20px">🔍 搜索文章</h2>
+          <div class="search-input-wrap">
+            <span class="search-icon">🔍</span>
+            <input class="search-input" type="text" placeholder="输入关键词搜索..." value="${escapeHtml(query)}" onkeyup="App.doSearch(this.value)" autofocus>
+          </div>
+          <div class="search-results" id="search-results">${resultsHTML}</div>
+          ${results.length === 0 ? '<div class="empty-state"><p>未找到匹配结果</p></div>' : ''}
+        </div>`;
+    });
+}
+
+function matchArticle(art, query) {
+  const fields = [art.title, art.content, art.author, (art.phrases || []).join(' ')];
+  return fields.some(f => (f || '').toLowerCase().includes(query));
+}
+
+function highlightText(text, query) {
+  if (!query || !text) return text;
+  const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+  return text.replace(regex, '<mark class="search-highlight">$1</mark>');
+}
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+// ── Phrases View ──
+function renderPhrases() {
+  // Use embedded data if available, otherwise fetch
+  const data = window.SITE_PHRASES;
+  if (!data || (!data.words || !data.highlights)) {
+    return fetch('data/phrases.json')
+      .then(r => r.json())
+      .then(d => renderPhrasesContent(d))
+      .catch(() => '<div class="empty-state"><div class="empty-icon">📝</div><h3>好词金句库加载中</h3><p>将在文章积累后自动生成</p></div>');
+  }
+  return renderPhrasesContent(data);
+}
+
+function renderPhrasesContent(data) {
+  const words = Object.entries(data.words || {}).sort((a,b) => b[1].count - a[1].count);
+  const highlights = Object.entries(data.highlights || {}).sort((a,b) => b[1].count - a[1].count);
+
+  // Size classes for word cloud
+  function wordSize(count) {
+    const max = words.length > 0 ? words[0][1].count : 1;
+    if (count > max * 0.8) return 'size-l';
+    if (count > max * 0.4) return 'size-m';
+    return '';
+  }
+
+  // Filter by category
+  let filteredWords = words;
+  let filteredHL = highlights;
+  if (STATE.catFilter && STATE.catFilter !== 'all') {
+    const catLabel = catInfo(STATE.catFilter).label;
+    filteredWords = words.filter(([_, info]) => (info.cats || []).includes(catLabel));
+    filteredHL = highlights.filter(([_, info]) => (info.cats || []).includes(catLabel));
+  }
+
+  return `
+    <div class="phrases-header">
+      <h2>📝 好词金句库</h2>
+      <p>从 ${data.totalDates || 0} 天 · ${(data.totalArticles || 0)} 篇文章中积累</p>
+      <div class="phrases-stats">
+        <div class="stat"><div class="stat-value">${Object.keys(data.words || {}).length}</div><div class="stat-label">好词</div></div>
+        <div class="stat"><div class="stat-value">${Object.keys(data.highlights || {}).length}</div><div class="stat-label">金句</div></div>
+      </div>
+    </div>
+
+    <div class="cat-nav">
+      <button class="${!STATE.catFilter || STATE.catFilter === 'all' ? 'active' : ''}" onclick="App.filterCat('all');App.refresh();">全部</button>
+      ${CAT_KEYS.map(cat => {
+        const info = catInfo(cat);
+        const active = STATE.catFilter === cat ? 'active' : '';
+        return `<button class="${active}" style="${active ? 'background:'+info.color+';border-color:'+info.color : ''}" onclick="App.filterCat('${cat}');App.refresh();">${info.label}</button>`;
+      }).join('')}
+    </div>
+
+    <h3 style="margin-bottom:14px;color:var(--text-secondary)">📖 高频好词</h3>
+    <div class="word-cloud">
+      ${filteredWords.length === 0 ? '<p style="color:var(--text-tertiary)">该分类暂无好词</p>' : ''}
+      ${filteredWords.slice(0, 100).map(([w, info]) => `
+        <span class="wc-item ${wordSize(info.count)}" title="出现 ${info.count} 次">${w}</span>
+      `).join('')}
+    </div>
+
+    <h3 style="margin-bottom:14px;color:var(--text-secondary);margin-top:32px">✨ 金句精选</h3>
+    <div class="golden-list">
+      ${filteredHL.length === 0 ? '<p style="color:var(--text-tertiary)">该分类暂无金句</p>' : ''}
+      ${filteredHL.slice(0, 50).map(([text, info]) => `
+        <div class="golden-item">
+          <div class="gi-text">${text}</div>
+          <div class="gi-meta">
+            <span class="gi-badge type-${info.type || 'quote'}">${info.type || '引用'}</span>
+            ${(info.cats || []).slice(0,3).map(c => `<span>${c}</span>`).join(' · ')}
+            ${info.count > 1 ? `<span>出现 ${info.count} 次</span>` : ''}
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+// ── Main Controller ──
+function refresh() {
+  const main = qs('#main-content');
+  const navLinks = qsa('.nav-links a');
+
+  // Update nav
+  navLinks.forEach(a => {
+    a.classList.toggle('active', a.dataset.view === STATE.view);
+  });
+
+  // Render view
+  let result;
+  switch (STATE.view) {
+    case 'today':
+      result = renderToday(STATE.date);
+      break;
+    case 'archive':
+      result = renderArchive();
+      break;
+    case 'search':
+      result = renderSearch(STATE.searchQuery || '');
+      break;
+    case 'phrases':
+      result = renderPhrases();
+      break;
+  }
+
+  if (typeof result === 'string') {
+    main.innerHTML = result;
+  } else if (result && typeof result.then === 'function') {
+    main.innerHTML = '<div class="skeleton" style="height:400px"></div>';
+    result.then(html => { main.innerHTML = html; });
+  }
+}
+
+// ── Public API ──
+window.App = {
+  refresh,
+  openArticle,
+  viewDate(slug) {
+    STATE.view = 'today';
+    STATE.date = slug;
+    refresh();
+    window.scrollTo(0, 0);
+  },
+  filterCat(cat) {
+    STATE.catFilter = cat;
+    refresh();
+  },
+  doSearch(query) {
+    STATE.searchQuery = query.trim();
+    if (STATE.searchQuery) {
+      STATE.view = 'search';
+      refresh();
+    }
+  },
+  goHome() {
+    STATE.view = 'today';
+    STATE.date = null;
+    STATE.catFilter = 'all';
+    refresh();
+  },
+};
+
+// ── Init ──
+document.addEventListener('DOMContentLoaded', () => {
+  // Nav clicks
+  qsa('.nav-links a').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      STATE.view = a.dataset.view;
+      STATE.date = null;
+      STATE.catFilter = 'all';
+      refresh();
+    });
+  });
+
+  // Brand click → home
+  const brand = qs('.site-brand');
+  if (brand) {
+    brand.addEventListener('click', e => {
+      e.preventDefault();
+      App.goHome();
+    });
+  }
+
+  // Keyboard shortcuts
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      const overlay = qs('.reading-overlay');
+      if (overlay) overlay.remove();
+    }
+  });
+
+  // Initial render
+  refresh();
+});
+
+})();
+</script>
+</body>
+</html>

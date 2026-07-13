@@ -1,0 +1,9 @@
+{
+  "name": "申论议论文 · 每日精选",
+  "short_name": "申论精选",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#faf9f6",
+  "theme_color": "#C00000",
+  "description": "人民日报观点频道每日议论文精选"
+}
