@@ -813,7 +813,7 @@ async function serveHomePage(env) {
     <div><span class="today-date">📰 ${today}</span><span class="today-weekday">${getWeekday(today)}</span></div>
     <div class="today-meta">
       <span>📄 今日 ${Object.keys(todayArticles).length} 篇</span>
-      <span>📚 累计 ${totalArticles} 篇</span>
+      <span><a href="/archive" style="color:var(--steel);text-decoration:none;transition:color .18s" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--steel)'">📚 累计 ${totalArticles} 篇</a></span>
       <span>🤖 自动更新于每天 8:00</span>
     </div>
   </div>
@@ -1001,6 +1001,13 @@ async function serveArchivePage(env) {
     return null;
   });
 
+  // 预加载每天的文章数据（用于归档页展开）
+  const daysData = {};
+  for (const slug of dates) {
+    const dayArticles = await env.ARTICLES.get(`articles/${slug}`, 'json');
+    if (dayArticles) daysData[slug] = dayArticles;
+  }
+
   const years = groups._years || {};
   const sectionsHTML = Object.entries(years).sort((a,b) => b[0]-a[0]).map(([year, months]) => `
     <div style="margin-bottom:32px">
@@ -1010,10 +1017,10 @@ async function serveArchivePage(env) {
           <h4 style="font-size:1rem;font-weight:600;color:var(--slate);margin-bottom:10px">${m.ym.split('-')[1]} 月</h4>
           <div style="display:flex;flex-wrap:wrap;gap:10px">
             ${m.items.sort((a,b) => b.slug.localeCompare(a.slug)).map(d => `
-              <a class="date-card" href="/" style="display:flex;flex-direction:column;align-items:center;padding:12px 16px;border-radius:var(--radius);border:1px solid var(--hairline);background:var(--canvas);text-decoration:none;color:var(--ink);min-width:64px;transition:all .18s">
+              <button class="date-card" data-date="${d.slug}" onclick="toggleDay('${d.slug}')" style="cursor:pointer;display:flex;flex-direction:column;align-items:center;padding:12px 16px;border-radius:var(--radius);border:1px solid var(--hairline);background:var(--canvas);color:var(--ink);min-width:64px;transition:all .18s;font-family:inherit">
                 <span style="font-size:1.5rem;font-weight:700;line-height:1.2">${d.slug.split('-')[2]}</span>
                 <span style="font-size:.75rem;color:var(--stone);margin-top:2px">${d.count} 篇</span>
-              </a>
+              </button>
             `).join('')}
           </div>
         </div>
@@ -1027,20 +1034,79 @@ async function serveArchivePage(env) {
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>归档 · 申论议论文</title>
 <style>${BASE_CSS}</style>
+<style>
+.date-card:hover{border-color:var(--primary)!important;background:var(--surface-hover)!important;transform:translateY(-1px)}
+.date-card.active{border-color:var(--primary)!important;background:var(--primary-light)!important;color:var(--primary)!important}
+.day-detail{max-height:0;overflow:hidden;transition:max-height .35s ease,opacity .25s ease;opacity:0}
+.day-detail.open{max-height:3000px;opacity:1}
+.day-detail .articles-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;margin-top:16px}
+@media(max-width:520px){.day-detail .articles-grid{grid-template-columns:1fr}}
+</style>
 </head>
 <body>
 <header class="site-header">
   <div class="header-inner">
     <a href="/" class="site-brand"><span class="brand-title">申论议论文<span class="brand-dot">·</span></span><span class="brand-sub">每日精选</span></a>
-    <nav class="nav-links"><a href="/">今日</a><a href="/archive" class="active">归档</a><a href="/phrases">好词金句</a></nav>
+    <nav class="nav-links"><a href="/">今日</a><a href="/archive" class="active">归档</a><a href="/phrases">好词金句</nav>
   </div>
 </header>
 <main class="main-content">
   <h1 style="font-size:1.875rem;font-weight:600;margin-bottom:6px;letter-spacing:-0.5px">📚 文章归档</h1>
   <p style="font-size:.875rem;color:var(--steel);margin-bottom:28px">共 ${dates.length} 天 · ${totalArticles} 篇文章</p>
   ${sectionsHTML || '<p style="text-align:center;color:var(--stone);padding:60px">归档为空</p>'}
+  <div id="dayDetailContainer"></div>
 </main>
 <footer class="site-footer"><div class="footer-brand">申论议论文 · 每日精选</div><div>来源：人民网 · 观点频道</div></footer>
+<script>
+var DAYS_DATA = ${JSON.stringify(daysData)};
+var CAT_CFG = ${JSON.stringify(CAT_CONFIG)};
+var openDay = null;
+function toggleDay(slug) {
+  var el = document.getElementById('detail-'+slug);
+  var btn = document.querySelector('[data-date="'+slug+'"]');
+  if(openDay && openDay !== slug) {
+    var prev = document.getElementById('detail-'+openDay);
+    var prevBtn = document.querySelector('[data-date="'+openDay+'"]');
+    if(prev){prev.classList.remove('open');prev.style.display='none';}
+    if(prevBtn) prevBtn.classList.remove('active');
+  }
+  if(!el) {
+    el = document.createElement('div');
+    el.id = 'detail-'+slug;
+    el.className = 'day-detail';
+    var data = DAYS_DATA[slug];
+    var html = '<div class="articles-grid">';
+    if(data) {
+      Object.entries(data).forEach(function(e){
+        var cat=e[0], art=e[1];
+        var cfg=CAT_CFG[cat]||{label:cat,color:'#666'};
+        var excerpt=(art.content||'').replace(/\\s+/g,'').slice(0,80);
+        html+='<a class="article-card" href="/article/'+slug+'/'+cat+'" style="text-decoration:none;color:inherit;display:block"><div class="card-top-bar" style="background:'+cfg.color+'"></div><div class="card-body"><div class="card-category" style="color:'+cfg.color+'">'+cfg.label+'</div><h3 class="card-title">'+escH(art.title||'')+'</h3><p class="card-excerpt">'+escH(excerpt)+'</p></div><div class="card-footer">'+((art.phrases||[]).length?'<span class="badge">📝 '+(art.phrases||[]).length+' 好词</span>':'')+((art.highlights||[]).length?'<span class="badge">✨ '+(art.highlights||[]).length+' 金句</span>':'')+(art.pub_date?'<span>'+art.pub_date+'</span>':'')+'</div></a>';
+      });
+    } else { html='<p style="text-align:center;color:var(--stone);padding:30px">该日数据不可用</p>'; }
+    html+='</div>';
+    el.innerHTML = html;
+    document.getElementById('dayDetailContainer').appendChild(el);
+    // trigger reflow then animate
+    void el.offsetHeight;
+  }
+  var isOpen = el.classList.contains('open');
+  if(isOpen) {
+    el.classList.remove('open');
+    btn.classList.remove('active');
+    setTimeout(function(){el.style.display='none';},350);
+    openDay = null;
+  } else {
+    el.style.display='block';
+    void el.offsetHeight;
+    el.classList.add('open');
+    btn.classList.add('active');
+    openDay = slug;
+    el.scrollIntoView({behavior:'smooth',block:'start'});
+  }
+}
+function escH(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+</script>
 </body>
 </html>`);
 }
