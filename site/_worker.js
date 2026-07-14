@@ -683,7 +683,7 @@ const FALLBACK_DEFS = {
 };
 
 // ── 加载成语释义 (KV 缓存 + 兜底字典) ──
-async function loadChengyuDefs(env, chengyuList) {
+async function loadChengyuDefs(env, chengyuList, skipApi = false) {
   if (!chengyuList || chengyuList.length === 0) return {};
   const defs = {};
   const missing = [];
@@ -711,8 +711,8 @@ async function loadChengyuDefs(env, chengyuList) {
     missing.push(...chengyuList.filter(w => !defs[w]));
   }
 
-  // 缺失的用硅基流动 API 生成 (兼容 OpenAI 格式)
-  if (missing.length > 0) {
+  // 缺失的用硅基流动 API 生成 (兼容 OpenAI 格式)；skipApi=true 时跳过（页面渲染不串行调 API，避免超时）
+  if (missing.length > 0 && !skipApi) {
     const apiKey = env.ARTICLES ? await env.ARTICLES.get('SILICONFLOW_API_KEY', 'text').catch(() => null) : null;
     if (apiKey) {
       for (const w of missing) {
@@ -1246,7 +1246,8 @@ async function servePhrasesPage(env) {
   const sortedWords = Object.entries(allWords).sort((a, b) => b[1].count - a[1].count);
   // 加载全部成语释义（分批，避免超时）
   const allWordList = sortedWords.map(([w]) => w);
-  const wordDefs = await loadChengyuDefs(env, allWordList);
+  // 页面渲染只取本地字典 + KV 缓存的释义，缺失的由前端“查看释义”按需拉取，避免请求内串行 API 超时
+  const wordDefs = await loadChengyuDefs(env, allWordList, true);
 
   // 成语卡片 JSON（供前端翻页）
   const wordsJSON = sortedWords.map(([w, info]) => ({
@@ -1310,6 +1311,9 @@ async function servePhrasesPage(env) {
 .idiom-card .ic-def{font-size:.8125rem;line-height:1.65;color:var(--slate)}
 .idiom-card .ic-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:2px}
 .idiom-card .ic-tag{font-size:.7rem;color:var(--steel);background:var(--surface-soft);padding:1px 7px;border-radius:4px}
+.idiom-card .ic-more{margin-top:2px;align-self:flex-start;font-size:.78rem;font-weight:500;color:var(--seal);background:var(--seal-soft);border:1px solid transparent;padding:4px 12px;border-radius:var(--radius-full);cursor:pointer;transition:all var(--duration) var(--ease)}
+.idiom-card .ic-more:hover:not(:disabled){border-color:var(--seal);background:var(--seal-soft)}
+.idiom-card .ic-more:disabled{opacity:.6;cursor:default}
 
 /* 金句卡片（紧凑版） */
 .golden-grid{display:flex;flex-direction:column;gap:10px}
@@ -1328,7 +1332,7 @@ async function servePhrasesPage(env) {
 
 @media(max-width:640px){
   .idiom-grid{grid-template-columns:1fr}
-  .lib-tabs{flex-direction:gap:0}
+  .lib-tabs{flex-wrap:wrap}
   .lib-tab{padding:12px 14px;font-size:.9rem}
   .pager{flex-direction:column;gap:8px;text-align:center}
 }
@@ -1388,8 +1392,8 @@ async function servePhrasesPage(env) {
 
 <script>
 // ── 数据 ──
-var WORDS_DATA = ${JSON.stringify(wordsJSON)};
-var GOLDEN_DATA = ${JSON.stringify(goldenJSON)};
+var WORDS_DATA = ${JSON.stringify(wordsJSON).replace(/</g,'\\u003c')};
+var GOLDEN_DATA = ${JSON.stringify(goldenJSON).replace(/</g,'\\u003c')};
 var PAGE_SIZE = 12;
 
 // ── 状态 ──
@@ -1397,7 +1401,30 @@ var currentLib = 'idiom';
 var idiomsPage = 1;
 var goldenPage = 1;
 
-function escH(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function escH(s){return(s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function escAttr(s){return(s==null?'':String(s)).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+// 生成翻页按钮（窗口式：当前页始终可见，>7 页时首尾+省略号）
+function buildPager(current, totalPages, goFn){
+  var parts=[];
+  parts.push('<button class="pager-btn" onclick="'+goFn+'('+(current-1)+')" '+(current<=1?'disabled':'')+'>◀ 上页</button>');
+  if(totalPages<=7){
+    for(var i=1;i<=totalPages;i++) parts.push('<button class="pager-btn'+(i===current?' active':'')+'" onclick="'+goFn+'('+i+')">'+i+'</button>');
+  }else{
+    var nums=[1];
+    var start=Math.max(2,current-1), end=Math.min(totalPages-1,current+1);
+    if(start>2) nums.push('...');
+    for(var i=start;i<=end;i++) nums.push(i);
+    if(end<totalPages-1) nums.push('...');
+    nums.push(totalPages);
+    nums.forEach(function(n){
+      if(n==='...'){parts.push('<span style="color:var(--stone);padding:0 6px">…</span>');}
+      else{parts.push('<button class="pager-btn'+(n===current?' active':'')+'" onclick="'+goFn+'('+n+')">'+n+'</button>');}
+    });
+  }
+  parts.push('<button class="pager-btn" onclick="'+goFn+'('+(current+1)+')" '+(current>=totalPages?'disabled':'')+'>下页 ▶</button>');
+  return parts.join('');
+}
 
 // ── 切换 Tab ──
 function switchLib(lib){
@@ -1421,18 +1448,7 @@ function renderIdioms(){
 
   // 翻页信息
   document.getElementById('infoIdiom').innerHTML='第 <em>'+idiomsPage+'</em> / '+totalPages+' 页，共 <em>'+total+'</em> 条';
-
-  // 翻页按钮
-  var btns='';
-  for(var i=1;i<=Math.min(totalPages,7);i++){
-    btns+='<button class="pager-btn'+(i===idiomsPage?' active':'')+'" onclick="goPage('+i+')">'+i+'</button>';
-  }
-  if(totalPages>7){
-    if(idiomsPage>4) btns+='<span style="color:var(--muted);padding:0 4px">…</span>';
-    if(idiomsPage<totalPages-2&&idiomsPage>4) btns+='<button class="pager-btn'+(idiomsPage===totalPages?' active':'')+'" onclick="goPage('+totalPages+')">'+totalPages+'</button>';
-  }
-  btns='<button class="pager-btn" onclick="goPage('+(idiomsPage-1)+')" '+(idiomsPage<=1?'disabled':'')+'>◀ 上页</button>'+btns+'<button class="pager-btn" onclick="goPage('+(idiomsPage+1)+')" '+(idiomsPage>=totalPages?'disabled':'')+'>下页 ▶</button>';
-  document.getElementById('btnsIdiom').innerHTML=btns;
+  document.getElementById('btnsIdiom').innerHTML=buildPager(idiomsPage,totalPages,'goPage');
 
   // 卡片
   if(pageData.length===0){
@@ -1441,12 +1457,16 @@ function renderIdioms(){
   }
   var html='';
   pageData.forEach(function(item){
-    html+='<div class="idiom-card"><div class="ic-head"><span class="ic-word">'+escH(item.w)+'</span><span class="ic-badge">×'+item.c+'</span></div><div class="ic-def">'+escH(item.d)+'</div><div class="ic-tags">'+item.cats.map(function(c){return '<span class="ic-tag">'+escH(c)+'</span>';}).join('')+'</div></div>';
+    var defHtml = item.d
+      ? '<div class="ic-def">'+escH(item.d)+'</div>'
+      : '<button class="ic-more" data-w="'+escAttr(item.w)+'" onclick="loadDef(this)">查看释义 ▸</button>';
+    html+='<div class="idiom-card"><div class="ic-head"><span class="ic-word">'+escH(item.w)+'</span><span class="ic-badge">×'+item.c+'</span></div>'+defHtml+'<div class="ic-tags">'+item.cats.map(function(c){return '<span class="ic-tag">'+escH(c)+'</span>';}).join('')+'</div></div>';
   });
   document.getElementById('gridIdiom').innerHTML=html;
 }
 
 function goPage(p){
+  if(p<1) return;
   idiomsPage=p;
   renderIdioms();
   document.getElementById('panelIdiom').scrollIntoView({behavior:'smooth',block:'start'});
@@ -1463,17 +1483,7 @@ function renderGolden(){
   var pageData=data.slice(start,start+PAGE_SIZE);
 
   document.getElementById('infoGolden').innerHTML='第 <em>'+goldenPage+'</em> / '+totalPages+' 页，共 <em>'+total+'</em> 条';
-
-  var btns='';
-  for(var i=1;i<=Math.min(totalPages,7);i++){
-    btns+='<button class="pager-btn'+(i===goldenPage?' active':'')+'" onclick="goGPage('+i+')">'+i+'</button>';
-  }
-  if(totalPages>7){
-    if(goldenPage>4) btns+='<span style="color:var(--muted);padding:0 4px">…</span>';
-    if(goldenPage<totalPages-2&&goldenPage>4) btns+='<button class="pager-btn"+(goldenPage===totalPages?' active':'')+'" onclick="goGPage('+totalPages+')">'+totalPages+'</button>';
-  }
-  btns='<button class="pager-btn" onclick="goGPage('+(goldenPage-1)+')" '+(goldenPage<=1?'disabled':'')+'>◀ 上页</button>'+btns+'<button class="pager-btn" onclick="goGPage('+(goldenPage+1)+')" '+(goldenPage>=totalPages?'disabled':'')+'>下页 ▶</button>';
-  document.getElementById('btnsGolden').innerHTML=btns;
+  document.getElementById('btnsGolden').innerHTML=buildPager(goldenPage,totalPages,'goGPage');
 
   if(pageData.length===0){
     document.getElementById('gridGolden').innerHTML='<div class="lib-empty"><div class="lib-empty-icon">✨</div>暂无金句数据</div>';
@@ -1487,9 +1497,26 @@ function renderGolden(){
 }
 
 function goGPage(p){
+  if(p<1) return;
   goldenPage=p;
   renderGolden();
   document.getElementById('panelGolden').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+// 点击“查看释义”按需从 /api/idiom 拉取并替换按钮
+function loadDef(btn){
+  var w=btn.getAttribute('data-w');
+  if(!w) return;
+  btn.disabled=true; btn.textContent='加载中…';
+  fetch('/api/idiom/'+encodeURIComponent(w)).then(function(r){return r.json();}).then(function(j){
+    var def=(j&&j.def)?j.def:'(暂无释义)';
+    var div=document.createElement('div');
+    div.className='ic-def';
+    div.textContent=def;
+    if(btn.parentNode) btn.parentNode.replaceChild(div,btn);
+  }).catch(function(){
+    btn.disabled=false; btn.textContent='加载失败，点击重试';
+  });
 }
 
 // ── 初始化 ──
