@@ -5,9 +5,15 @@ VPS 端每日抓取脚本
 - 写入 CF KV
 - 调 CF Workers AI 生成成语释义
 
-VPS 上添加 cron:
+VPS 上添加 cron（凭据放在脚本同目录的 .env 中，见 .env.example）:
   crontab -e
   0 8 * * * /usr/bin/python3 /opt/shenlun/cron_crawl.py >> /var/log/shenlun-cron.log 2>&1
+
+  在 /opt/shenlun/.env 中填入：
+  CF_API_TOKEN=xxx
+  CF_ACCOUNT_ID=xxx
+  CF_KV_NAMESPACE_ID=xxx
+  SILICONFLOW_API_KEY=xxx
 """
 
 import os, sys, time, re, json, urllib.request, urllib.parse
@@ -19,7 +25,26 @@ if sys.stderr.encoding != 'utf-8':
     sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
 from datetime import datetime, timezone, timedelta
 
-# ── 配置（敏感凭据从环境变量读取，切勿硬编码进仓库）──
+# ── 自动加载同目录 .env（cron 环境默认没有用户环境变量，避免凭据为空导致写 KV 失败）──
+def load_dotenv(path=None):
+    if path is None:
+        path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '.env')
+    if not os.path.exists(path):
+        return False
+    with open(path, encoding='utf-8') as f:
+        for line in f:
+            line = line.strip()
+            if not line or line.startswith('#') or '=' not in line:
+                continue
+            k, v = line.split('=', 1)
+            k, v = k.strip(), v.strip().strip('"').strip("'")
+            if k and k not in os.environ:
+                os.environ[k] = v
+    return True
+
+load_dotenv()
+
+# ── 配置（敏感凭据从环境变量 / 同目录 .env 读取，切勿硬编码进仓库）──
 CF_API_BASE = "https://api.cloudflare.com/client/v4"
 CF_TOKEN = os.environ.get("CF_API_TOKEN", "")
 CF_ACCOUNT = os.environ.get("CF_ACCOUNT_ID", "")
@@ -400,6 +425,10 @@ def score_article(article, cat_key, col_name):
 # ── Main ──
 def main():
     print(f'[{datetime.now().isoformat()}] Starting daily crawl...')
+    if not CF_TOKEN or not CF_ACCOUNT or not CF_KV_NS:
+        print('[FATAL] CF_API_TOKEN / CF_ACCOUNT_ID / CF_KV_NAMESPACE_ID 未配置（环境变量为空且未在脚本同目录找到 .env）。')
+        print('        请创建 /opt/shenlun/.env 并填入上述变量后重试。脚本已退出。')
+        sys.exit(1)
 
     # Load seen URLs
     seen_raw = kv_get('seen_urls')

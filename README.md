@@ -70,7 +70,7 @@ npx wrangler pages deploy . --project-name shenlun-daily --branch main
 
 ### 2. 爬虫（VPS 每日定时）
 
-`worker/cron_crawl.py` 仅依赖 Python 3 标准库，无需 pip 安装。
+`worker/cron_crawl.py` 仅依赖 Python 3 标准库，无需 pip 安装。脚本会**自动加载同目录的 `.env`**（cron 环境默认没有用户环境变量，必须靠 `.env` 或 crontab 导出提供凭据）。
 
 ```bash
 # VPS 上
@@ -78,7 +78,15 @@ crontab -e
 0 8 * * * /usr/bin/python3 /opt/shenlun/cron_crawl.py >> /var/log/shenlun-cron.log 2>&1
 ```
 
-脚本通过环境变量读取 Cloudflare / 硅基流动凭据，写入 KV 后由前端 `site/_worker.js` 读取渲染。
+在 `/opt/shenlun/.env` 中填入（变量名见 `.env.example`）：
+```
+CF_API_TOKEN=你的Cloudflare_API_Token
+CF_ACCOUNT_ID=你的Cloudflare_Account_ID
+CF_KV_NAMESPACE_ID=你的KV命名空间ID
+SILICONFLOW_API_KEY=你的硅基流动Key
+```
+
+脚本通过环境变量 / `.env` 读取 Cloudflare / 硅基流动凭据，写入 KV 后由前端 `site/_worker.js` 读取渲染。
 
 ## 本地工具
 
