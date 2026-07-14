@@ -147,7 +147,6 @@ button{cursor:pointer;font-family:inherit;border:none;background:none;color:inhe
 .header-inner{max-width:var(--max-width);margin:0 auto;padding:12px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px}
 .site-brand{display:flex;align-items:baseline;gap:8px;text-decoration:none;white-space:nowrap}
 .brand-title{font-size:1.125rem;font-weight:600;color:var(--ink-deep);letter-spacing:-0.3px}
-.brand-dot{color:var(--primary);font-weight:600}
 .brand-sub{font-size:.875rem;color:var(--stone)}
 .nav-links{display:flex;gap:2px;background:var(--canvas);border:1px solid var(--hairline);border-radius:var(--radius-full);padding:3px}
 .nav-links a{padding:6px 16px;border-radius:var(--radius-full);font-size:.875rem;color:var(--slate);font-weight:500;transition:all var(--duration) var(--ease);text-decoration:none}
@@ -155,8 +154,6 @@ button{cursor:pointer;font-family:inherit;border:none;background:none;color:inhe
 .nav-links a.active{background:var(--primary);color:#fff;box-shadow:var(--shadow-xs)}
 
 .main-content{max-width:var(--max-width);margin:0 auto;padding:28px 24px 60px}
-
-.today-banner{display:none}
 
 .cat-nav{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:24px}
 .cat-nav button{padding:6px 14px;border-radius:var(--radius-full);font-size:.875rem;border:1px solid var(--hairline);background:var(--canvas);color:var(--slate);font-weight:500;transition:all var(--duration) var(--ease)}
@@ -642,7 +639,6 @@ const FALLBACK_DEFS = {
   '风险挑战': '可能遇到的危险和考验。',
   '勇挑重担': '勇于承担重要的责任。',
   '千锤百炼': '比喻经过反复锻炼和考验。',
-  '久久为功': '持之以恒，锲而不舍，长期见效。',
   '一茬接着一茬': '一拨接一拨，连续不断。',
   '绵绵用力': '持续不断地投入力量。',
   '稳中求进': '在稳定的基础上谋求发展。',
@@ -676,10 +672,7 @@ const FALLBACK_DEFS = {
   '以上率下': '上级以身作则，带动下级。',
   '有始有终': '有开头也有结尾，指做事认真，能坚持到底。',
   '善始善终': '从开始到结束都很好，比喻做事认真。',
-  '抓铁有痕': '比喻工作力度大，能留下明显的成果。',
-  '踏石留印': '比喻做事扎实、一步一个脚印。',
   '掷地有声': '形容话语坚定有力、行动果断。',
-  '久久为功': '持之以恒、锲而不舍，长期坚持做事方能见到成效。',
 
   // 政策口号类
   '一任接着一任抓': '一任领导接着一任领导持续抓工作，强调接续奋斗。',
