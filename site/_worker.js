@@ -10,14 +10,14 @@
  */
 
 const CAT_CONFIG = {
-  '作风类': { label: '工作作风', color: '#C00000' },
-  '党建类': { label: '党的建设', color: '#8B0000' },
-  '经济类': { label: '经济建设', color: '#0070C0' },
-  '科技类': { label: '科技创新', color: '#7030A0' },
-  '民生类': { label: '民生保障', color: '#00884A' },
-  '生态类': { label: '生态文明', color: '#385723' },
-  '文化类': { label: '文化建设', color: '#B8860B' },
-  '治理类': { label: '社会治理', color: '#404040' },
+  '作风类': { label: '工作作风', color: '#B5402E' },
+  '党建类': { label: '党的建设', color: '#8A2E2E' },
+  '经济类': { label: '经济建设', color: '#A8762B' },
+  '科技类': { label: '科技创新', color: '#2E5A88' },
+  '民生类': { label: '民生保障', color: '#3E7C5A' },
+  '生态类': { label: '生态文明', color: '#2F6B4F' },
+  '文化类': { label: '文化建设', color: '#6B4E8C' },
+  '治理类': { label: '社会治理', color: '#3A3A3A' },
 };
 
 // 200+ 申论常用成语
@@ -80,31 +80,61 @@ function findChengyuInText(text) {
 // ── CSS ──
 const BASE_CSS = `
 :root{
-  --canvas:#fff;--surface:#f6f5f4;--surface-soft:#fafaf9;--surface-hover:#efedeb;
-  --ink-deep:#000;--ink:#1a1a1a;--charcoal:#37352f;--slate:#5d5b54;
-  --steel:#787671;--stone:#a4a097;--muted:#bbb8b1;
-  --hairline:#e5e3df;--hairline-soft:#ede9e4;--hairline-strong:#c8c4be;
-  --primary:#5645d4;--primary-hover:#4534b3;--primary-light:#efeefc;--link:#0075de;
-  --gold:#B8860B;--gold-bg:#FFFDF5;--gold-border:#E8D5A0;--highlight-yellow:#fef7d6;
-  --success:#1aae39;--warning:#dd5b00;--error:#e03131;
+  /* 宣纸 · 墨 · 朱印：保留变量名，重映射为书卷气质 */
+  --canvas:#FBF8F1;            /* 卡片/面板：浅宣纸 */
+  --surface:#ECE6D9;           /* 次级表面 */
+  --surface-soft:#F3EFE6;      /* 页面底色：暖宣纸 */
+  --surface-hover:#E4DCCB;
+  --ink-deep:#1C1813;
+  --ink:#211D18;
+  --charcoal:#3A342B;
+  --slate:#6B645B;
+  --steel:#8A8175;
+  --stone:#A99E8E;
+  --muted:#B8AE9E;
+  --hairline:#E2DBCD;
+  --hairline-soft:#EAE3D6;
+  --hairline-strong:#CFC6B4;
+  --primary:#A8322A;           /* 朱印红 */
+  --primary-hover:#86241D;
+  --primary-light:#F4E4DF;
+  --link:#2E5A88;
+  --gold:#9A7B2E;
+  --gold-bg:#F6EFD9;
+  --gold-border:#E4D2A0;
+  --highlight-yellow:#F6EFD9;
+  --success:#3E7C5A;--warning:#B5762A;--error:#B5402E;
+  --paper:#F3EFE6;--paper-2:#FBF8F1;--paper-3:#ECE6D9;
+  --ink-soft:#6B645B;--ink-faint:#A99E8E;
+  --line:#E2DBCD;--line-soft:#EAE3D6;--line-strong:#CFC6B4;
+  --seal:#A8322A;--seal-deep:#86241D;--seal-soft:#F4E4DF;
   --max-width:1080px;--content-width:780px;--reading-width:720px;
-  --radius-xs:4px;--radius-sm:6px;--radius:8px;--radius-lg:12px;--radius-xl:16px;--radius-full:9999px;
-  --font-sans:"Microsoft YaHei","PingFang SC","Hiragino Sans GB","Noto Sans SC",Inter,system-ui,sans-serif;
-  --font-serif:"Noto Serif SC","Source Han Serif SC","Songti SC",Georgia,serif;
+  --r-xs:4px;--r-sm:6px;--r:10px;--r-lg:14px;--r-xl:18px;--r-full:9999px;
+  --radius-xs:4px;--radius-sm:6px;--radius:10px;--radius-lg:14px;--radius-xl:18px;--radius-full:9999px;
+  --font-sans:"PingFang SC","Microsoft YaHei","Source Han Sans SC","Hiragino Sans GB","Noto Sans SC",system-ui,sans-serif;
+  --font-serif:"Noto Serif SC","Source Han Serif SC","Songti SC","STSong",Georgia,serif;
+  --serif:var(--font-serif);--sans:var(--font-sans);
   --weight-bold:600;--weight-medium:500;--weight-regular:400;
-  --shadow-xs:0 1px 2px rgba(0,0,0,.04);--shadow-sm:0 1px 3px rgba(0,0,0,.06);
-  --shadow:0 2px 8px rgba(0,0,0,.06);--shadow-lg:0 8px 24px rgba(0,0,0,.1);--shadow-xl:0 16px 40px rgba(0,0,0,.12);
-  --ease:cubic-bezier(0.16, 1, 0.3, 1);--duration:180ms;
+  --sh-xs:0 1px 2px rgba(40,30,20,.05);--sh-sm:0 2px 8px rgba(40,30,20,.06);
+  --sh:0 6px 18px rgba(40,30,20,.08);--sh-lg:0 14px 38px rgba(40,30,20,.12);
+  --shadow-xs:0 1px 2px rgba(40,30,20,.05);--shadow-sm:0 2px 8px rgba(40,30,20,.06);
+  --shadow:0 6px 18px rgba(40,30,20,.08);--shadow-lg:0 14px 38px rgba(40,30,20,.12);--shadow-xl:0 16px 40px rgba(40,30,20,.14);
+  --ease:cubic-bezier(0.16, 1, 0.3, 1);--dur:200ms;--duration:200ms;
 }
-@media(prefers-color-scheme:dark){
-  :root{--canvas:#1a1a1a;--surface:#242424;--surface-soft:#202020;--surface-hover:#2e2e2e;
-    --ink-deep:#fff;--ink:#e8e6e1;--charcoal:#d4d2cc;--slate:#a09d96;
-    --steel:#817e78;--stone:#62605b;--muted:#4a4844;
-    --hairline:#383836;--hairline-soft:#323230;--hairline-strong:#4a4844;
-    --primary:#7b6ff0;--primary-hover:#9085f3;--primary-light:#252040;--link:#5ca0f0;
-    --shadow-xs:0 1px 2px rgba(0,0,0,.3);--shadow-sm:0 1px 3px rgba(0,0,0,.4);
-    --shadow:0 2px 8px rgba(0,0,0,.5);--shadow-lg:0 8px 24px rgba(0,0,0,.6);
-    --gold-bg:#2a2410;--gold-border:#5a4820;--highlight-yellow:#3d3508;}
+[data-theme="dark"]{
+  --canvas:#211E18;--surface:#2A2620;--surface-soft:#17150F;--surface-hover:#322C24;
+  --ink-deep:#F4EDE0;--ink:#ECE5D7;--charcoal:#C8BFAF;--slate:#B7AE9E;
+  --steel:#8F8676;--stone:#837B6E;--muted:#6B6356;
+  --hairline:#332E25;--hairline-soft:#2A251E;--hairline-strong:#403929;
+  --primary:#D6544A;--primary-hover:#E0665B;--primary-light:#3A241E;--link:#6FA0C9;
+  --gold:#C9A85A;--gold-bg:#2C2618;--gold-border:#4A3F22;--highlight-yellow:#2C2618;
+  --success:#5C9A78;--warning:#CF9345;--error:#D6544A;
+  --paper:#17150F;--paper-2:#211E18;--paper-3:#2A2620;
+  --ink-soft:#B7AE9E;--ink-faint:#837B6E;
+  --line:#332E25;--line-soft:#2A251E;--line-strong:#403929;
+  --seal:#D6544A;--seal-deep:#B23A30;--seal-soft:#3A241E;
+  --sh-xs:0 1px 2px rgba(0,0,0,.4);--sh-sm:0 2px 8px rgba(0,0,0,.45);
+  --sh:0 6px 18px rgba(0,0,0,.5);--sh-lg:0 14px 38px rgba(0,0,0,.6);
 }
 *,::before,::after{box-sizing:border-box;margin:0;padding:0}
 html{font-size:16px;scroll-behavior:smooth;-webkit-text-size-adjust:100%}
@@ -126,10 +156,7 @@ button{cursor:pointer;font-family:inherit;border:none;background:none;color:inhe
 
 .main-content{max-width:var(--max-width);margin:0 auto;padding:28px 24px 60px}
 
-.today-banner{background:var(--canvas);border-radius:var(--radius-lg);padding:20px 24px;margin-bottom:24px;box-shadow:var(--shadow-xs);border:1px solid var(--hairline);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
-.today-date{font-size:1.75rem;font-weight:600;letter-spacing:-0.5px}
-.today-weekday{font-size:1rem;color:var(--slate);margin-left:6px;font-weight:400}
-.today-meta{display:flex;gap:16px;font-size:.875rem;color:var(--steel);flex-wrap:wrap}
+.today-banner{display:none}
 
 .cat-nav{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:24px}
 .cat-nav button{padding:6px 14px;border-radius:var(--radius-full);font-size:.875rem;border:1px solid var(--hairline);background:var(--canvas);color:var(--slate);font-weight:500;transition:all var(--duration) var(--ease)}
@@ -201,19 +228,55 @@ button{cursor:pointer;font-family:inherit;border:none;background:none;color:inhe
 .site-footer{text-align:center;padding:32px 24px;color:var(--stone);font-size:.75rem;border-top:1px solid var(--hairline);max-width:var(--max-width);margin:0 auto}
 .footer-brand{font-weight:600;color:var(--primary);margin-bottom:4px}
 
+/* ── 书卷/报头美学（新增） ── */
+.site-brand{gap:12px}
+.brand-seal{flex-shrink:0;width:38px;height:38px;border-radius:8px;background:var(--seal);color:#fff;font-family:var(--serif);font-weight:700;font-size:.95rem;display:flex;align-items:center;justify-content:center;letter-spacing:-1px;box-shadow:var(--sh-xs);line-height:1}
+.brand-text{display:flex;flex-direction:column;line-height:1.15}
+.brand-title{font-family:var(--serif);font-size:1.2rem;font-weight:700;color:var(--ink);letter-spacing:.5px}
+.brand-sub{font-size:.7rem;color:var(--ink-faint);letter-spacing:.5px}
+.nav-links a.active{color:var(--seal)}
+.nav-links a.active::after{content:'';position:absolute;left:14px;right:14px;bottom:2px;height:2px;background:var(--seal);border-radius:2px}
+.theme-toggle{margin-left:8px;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem;border:1px solid var(--hairline);background:var(--surface);transition:all var(--dur) var(--ease)}
+.theme-toggle:hover{border-color:var(--seal);transform:rotate(15deg)}
+
+.masthead{border-top:3px double var(--ink);padding-top:18px;margin-bottom:28px}
+.masthead-kicker{font-size:.78rem;letter-spacing:4px;color:var(--seal);font-weight:600;margin-bottom:10px}
+.masthead-row{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;border-bottom:1px solid var(--hairline);padding-bottom:14px}
+.masthead-title{font-family:var(--serif);font-size:2.1rem;font-weight:700;letter-spacing:1px;color:var(--ink)}
+.masthead-date{text-align:right;line-height:1.1}
+.masthead-day{display:block;font-family:var(--serif);font-size:1.5rem;font-weight:700;color:var(--ink)}
+.masthead-week{font-size:.85rem;color:var(--ink-faint)}
+.masthead-meta{display:flex;gap:18px;flex-wrap:wrap;font-size:.85rem;color:var(--ink-soft);margin-top:14px}
+.masthead-meta a{color:var(--ink-soft)}
+.masthead-meta a:hover{color:var(--seal)}
+
+.card-title{font-family:var(--serif);font-size:1.1rem;font-weight:700;line-height:1.4}
+.card-category{font-size:.72rem;font-weight:600;letter-spacing:1px;margin-bottom:10px;display:inline-flex;align-items:center;gap:6px}
+.card-category::before{content:'';width:7px;height:7px;border-radius:2px;background:currentColor;opacity:.85}
+.article-card{border-radius:var(--r)}
+.article-card:hover .card-top-bar{height:5px}
+
+.page-title{font-family:var(--serif);font-size:2rem;font-weight:700;margin-bottom:8px;color:var(--ink);letter-spacing:.5px}
+.page-sub{font-size:.875rem;color:var(--ink-soft);margin-bottom:28px}
+.section-title{font-family:var(--serif);font-size:1.35rem;font-weight:700;margin:8px 0 16px;color:var(--ink);padding-left:12px;border-left:3px solid var(--seal)}
+.article-title{font-family:var(--serif);font-size:2rem;font-weight:700;line-height:1.45}
+.article-header{border-top:3px double var(--ink);padding-top:22px;margin-bottom:24px}
+
 @media(max-width:768px){
   .header-inner{padding:10px 16px}
   .brand-sub{display:none}
-  .nav-links a{padding:5px 12px;font-size:.8125rem}
-  .main-content{padding:16px 12px 40px}
-  .article-page{padding:16px 12px 60px}
-  .article-header{padding:20px 22px}
+  .nav-links a{padding:6px 10px;font-size:.8rem}
+  .main-content{padding:20px 14px 48px}
+  .article-page{padding:20px 14px 60px}
+  .article-header{padding:18px 20px}
   .article-body{padding:24px 20px}
-  .article-title{font-size:1.375rem}
-  .article-body p{font-size:1rem;line-height:1.9}
-  .today-date{font-size:1.5rem}
+  .article-title{font-size:1.5rem}
+  .article-body p{font-size:1rem;line-height:1.95}
   .articles-grid{grid-template-columns:1fr}
   .extras-content{padding:18px 20px}
+  .masthead-title{font-size:1.6rem}
+  .masthead-day{font-size:1.4rem}
+  .page-title{font-size:1.6rem}
 }
 `;
 
@@ -792,31 +855,57 @@ async function serveHomePage(env) {
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<script>
+(function(){
+  try{
+    var t=localStorage.getItem('shenlun-theme');
+    if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}
+    document.documentElement.setAttribute('data-theme',t);
+    var syncIcon=function(){var b=document.querySelector('.theme-toggle');if(b)b.textContent=(document.documentElement.getAttribute('data-theme')==='dark')?'☀️':'🌙';};
+    window.toggleTheme=function(){var c=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',c);try{localStorage.setItem('shenlun-theme',c);}catch(e){}syncIcon();};
+    if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',syncIcon);}else{syncIcon();}
+  }catch(e){}
+})();
+</script>
 <title>申论议论文 · 每日精选</title>
-<meta name="theme-color" content="#5645d4">
+<meta name="theme-color" content="#A8322A">
 <link rel="manifest" href="/manifest.json">
 <style>${BASE_CSS}</style>
 </head>
 <body>
-<header class="site-header">
-  <div class="header-inner">
-    <a href="/" class="site-brand"><span class="brand-title">申论议论文<span class="brand-dot">·</span></span><span class="brand-sub">每日精选</span></a>
-    <nav class="nav-links">
-      <a href="/" class="active">今日</a>
-      <a href="/archive">归档 (${totalDates}天)</a>
-      <a href="/phrases">好词金句</a>
-    </nav>
-  </div>
-</header>
+    <header class="site-header">
+      <div class="header-inner">
+        <a href="/" class="site-brand">
+          <span class="brand-seal">申论</span>
+          <span class="brand-text">
+            <span class="brand-title">申论议论文</span>
+            <span class="brand-sub">每日精选 · 人民网观点</span>
+          </span>
+        </a>
+        <nav class="nav-links">
+          <a href="/" class="active">今日</a>
+          <a href="/archive">归档</a>
+          <a href="/phrases">好词金句</a>
+          <button class="theme-toggle" onclick="toggleTheme()" aria-label="切换日/夜读模式">🌙</button>
+        </nav>
+      </div>
+    </header>
 <main class="main-content">
-  <div class="today-banner">
-    <div><span class="today-date">📰 ${today}</span><span class="today-weekday">${getWeekday(today)}</span></div>
-    <div class="today-meta">
-      <span>📄 今日 ${Object.keys(todayArticles).length} 篇</span>
-      <span><a href="/archive" style="color:var(--steel);text-decoration:none;transition:color .18s" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--steel)'">📚 累计 ${totalArticles} 篇</a></span>
-      <span>🤖 自动更新于每天 8:00</span>
-    </div>
-  </div>
+    <section class="masthead">
+      <p class="masthead-kicker">每 日 精 选 · 人 民 网 观 点 频 道</p>
+      <div class="masthead-row">
+        <h1 class="masthead-title">今日论点导读</h1>
+        <div class="masthead-date">
+          <span class="masthead-day">${today}</span>
+          <span class="masthead-week">${getWeekday(today)}</span>
+        </div>
+      </div>
+      <div class="masthead-meta">
+        <span>📄 今日 ${Object.keys(todayArticles).length} 篇</span>
+        <a href="/archive">📚 累计 ${totalArticles} 篇</a>
+        <span>🤖 每日 8:00 自动更新</span>
+      </div>
+    </section>
   <div class="cat-nav" id="catNav">
     <button class="active" onclick="allArticles()">全部</button>
     ${Object.entries(CAT_CONFIG).map(([k, v]) => `<button onclick="filterCat('${k}')">${v.label}</button>`).join('')}
@@ -921,6 +1010,18 @@ async function serveArticlePage(env, date, cat) {
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<script>
+(function(){
+  try{
+    var t=localStorage.getItem('shenlun-theme');
+    if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}
+    document.documentElement.setAttribute('data-theme',t);
+    var syncIcon=function(){var b=document.querySelector('.theme-toggle');if(b)b.textContent=(document.documentElement.getAttribute('data-theme')==='dark')?'☀️':'🌙';};
+    window.toggleTheme=function(){var c=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',c);try{localStorage.setItem('shenlun-theme',c);}catch(e){}syncIcon();};
+    if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',syncIcon);}else{syncIcon();}
+  }catch(e){}
+})();
+</script>
 <title>${esc(article.title || '')} · 申论议论文</title>
 <meta name="theme-color" content="${cfg.color}">
 <style>${BASE_CSS}</style>
@@ -928,11 +1029,18 @@ async function serveArticlePage(env, date, cat) {
 <body>
 <header class="site-header">
   <div class="header-inner">
-    <a href="/" class="site-brand"><span class="brand-title">申论议论文<span class="brand-dot">·</span></span><span class="brand-sub">每日精选</span></a>
+    <a href="/" class="site-brand">
+      <span class="brand-seal">申论</span>
+      <span class="brand-text">
+        <span class="brand-title">申论议论文</span>
+        <span class="brand-sub">每日精选 · 人民网观点</span>
+      </span>
+    </a>
     <nav class="nav-links">
       <a href="/">今日</a>
       <a href="/archive">归档</a>
       <a href="/phrases">好词金句</a>
+      <button class="theme-toggle" onclick="toggleTheme()" aria-label="切换日/夜读模式">🌙</button>
     </nav>
   </div>
 </header>
@@ -1032,6 +1140,18 @@ async function serveArchivePage(env) {
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<script>
+(function(){
+  try{
+    var t=localStorage.getItem('shenlun-theme');
+    if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}
+    document.documentElement.setAttribute('data-theme',t);
+    var syncIcon=function(){var b=document.querySelector('.theme-toggle');if(b)b.textContent=(document.documentElement.getAttribute('data-theme')==='dark')?'☀️':'🌙';};
+    window.toggleTheme=function(){var c=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',c);try{localStorage.setItem('shenlun-theme',c);}catch(e){}syncIcon();};
+    if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',syncIcon);}else{syncIcon();}
+  }catch(e){}
+})();
+</script>
 <title>归档 · 申论议论文</title>
 <style>${BASE_CSS}</style>
 <style>
@@ -1046,13 +1166,19 @@ async function serveArchivePage(env) {
 <body>
 <header class="site-header">
   <div class="header-inner">
-    <a href="/" class="site-brand"><span class="brand-title">申论议论文<span class="brand-dot">·</span></span><span class="brand-sub">每日精选</span></a>
-    <nav class="nav-links"><a href="/">今日</a><a href="/archive" class="active">归档</a><a href="/phrases">好词金句</nav>
+    <a href="/" class="site-brand">
+      <span class="brand-seal">申论</span>
+      <span class="brand-text">
+        <span class="brand-title">申论议论文</span>
+        <span class="brand-sub">每日精选 · 人民网观点</span>
+      </span>
+    </a>
+    <nav class="nav-links"><a href="/">今日</a><a href="/archive" class="active">归档</a><a href="/phrases">好词金句</a><button class="theme-toggle" onclick="toggleTheme()" aria-label="切换日/夜读模式">🌙</button></nav>
   </div>
 </header>
 <main class="main-content">
-  <h1 style="font-size:1.875rem;font-weight:600;margin-bottom:6px;letter-spacing:-0.5px">📚 文章归档</h1>
-  <p style="font-size:.875rem;color:var(--steel);margin-bottom:28px">共 ${dates.length} 天 · ${totalArticles} 篇文章</p>
+  <h1 class="page-title">📚 文章归档</h1>
+  <p class="page-sub">共 ${dates.length} 天 · ${totalArticles} 篇文章</p>
   ${sectionsHTML || '<p style="text-align:center;color:var(--stone);padding:60px">归档为空</p>'}
   <div id="dayDetailContainer"></div>
 </main>
@@ -1164,25 +1290,42 @@ async function servePhrasesPage(env) {
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<script>
+(function(){
+  try{
+    var t=localStorage.getItem('shenlun-theme');
+    if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}
+    document.documentElement.setAttribute('data-theme',t);
+    var syncIcon=function(){var b=document.querySelector('.theme-toggle');if(b)b.textContent=(document.documentElement.getAttribute('data-theme')==='dark')?'☀️':'🌙';};
+    window.toggleTheme=function(){var c=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',c);try{localStorage.setItem('shenlun-theme',c);}catch(e){}syncIcon();};
+    if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',syncIcon);}else{syncIcon();}
+  }catch(e){}
+})();
+</script>
 <title>好词金句 · 申论议论文</title>
 <style>${BASE_CSS}</style>
 </head>
 <body>
 <header class="site-header">
   <div class="header-inner">
-    <a href="/" class="site-brand"><span class="brand-title">申论议论文<span class="brand-dot">·</span></span><span class="brand-sub">每日精选</span></a>
-    <nav class="nav-links"><a href="/">今日</a><a href="/archive">归档</a><a href="/phrases" class="active">好词金句</a></nav>
+    <a href="/" class="site-brand">
+      <span class="brand-seal">申论</span>
+      <span class="brand-text">
+        <span class="brand-title">申论议论文</span>
+        <span class="brand-sub">每日精选 · 人民网观点</span>
+      </span>
+    </a>
+    <nav class="nav-links"><a href="/">今日</a><a href="/archive">归档</a><a href="/phrases" class="active">好词金句</a><button class="theme-toggle" onclick="toggleTheme()" aria-label="切换日/夜读模式">🌙</button></nav>
   </div>
 </header>
 <main class="main-content">
-  <h1 style="font-size:1.875rem;font-weight:600;margin-bottom:6px;letter-spacing:-0.5px">📝 好词金句库</h1>
-  <p style="font-size:.875rem;color:var(--steel);margin-bottom:8px">从 ${dates.length} 天文章中提取的高频成语</p>
-  <p style="font-size:.8125rem;color:var(--stone);margin-bottom:28px">悬停词条查看完整释义（由 AI 生成）</p>
+  <h1 class="page-title">📝 好词金句库</h1>
+  <p class="page-sub">从 ${dates.length} 天文章中提取的高频成语 · 悬停词条查看完整释义（由 AI 生成）</p>
 
-  <h2 style="font-size:1.25rem;font-weight:600;margin-bottom:14px;color:var(--slate)">📖 关键词</h2>
+  <h2 class="section-title">📖 关键词</h2>
   <div class="words-grid" style="margin-bottom:32px">${wordsHTML}</div>
 
-  <h2 style="font-size:1.25rem;font-weight:600;margin-bottom:14px;color:var(--slate)">✨ 金句摘录</h2>
+  <h2 class="section-title">✨ 金句摘录</h2>
   <div class="golden-list">${goldenHTML}</div>
 </main>
 <footer class="site-footer"><div class="footer-brand">申论议论文 · 每日精选</div><div>来源：人民网 · 观点频道</div></footer>
