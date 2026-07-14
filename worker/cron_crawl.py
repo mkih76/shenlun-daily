@@ -422,6 +422,23 @@ def score_article(article, cat_key, col_name):
     return score
 
 
+# ── 归档补位: 整栏抓取失败时, 取该栏目最近一次的历史文章 ──
+def get_last_article_for_cat(cat):
+    try:
+        man_raw = kv_get('manifest')
+        dates = json.loads(man_raw).keys() if man_raw else []
+    except Exception:
+        dates = []
+    for d in sorted(dates, reverse=True):
+        try:
+            ad = json.loads(kv_get(f'articles/{d}') or '{}')
+        except Exception:
+            continue
+        if cat in ad and ad[cat].get('title'):
+            return ad[cat], d
+    return None, None
+
+
 # ── Main ──
 def main():
     print(f'[{datetime.now().isoformat()}] Starting daily crawl...')
@@ -454,20 +471,11 @@ def main():
             links = extract_article_links(list_html)
             print(f'  {len(links)} candidates')
 
-            # Top 3 unseen
-            candidates = []
-            for link in links:
-                if len(candidates) >= 3: break
-                if link['url'] not in seen and link['url'] not in new_seen:
-                    candidates.append(link)
-                    new_seen.add(link['url'])
-
-            if not candidates:
-                print('  No new article')
-                continue
-
-            best, best_score = None, -1
-            for cand in candidates:
+            # 取最新 5 篇评分: 优先选「未读过」的新稿, 否则取当期最新一篇(保证 8 栏不空)
+            top = links[:5]
+            best_unseen, best_unseen_score = None, -1
+            best_any, best_any_score = None, -1
+            for cand in top:
                 try:
                     time.sleep(1.5)
                     html = fetch(cand['url'])
@@ -483,20 +491,35 @@ def main():
                     article['column_name'] = col_name
                     article['author'] = ''
                     article['pub_date'] = article.get('pub_date', '')
-                    if score > best_score:
-                        best_score = score
-                        if best: new_seen.discard(best['url'])
-                        best = article
-                    else:
-                        new_seen.discard(cand['url'])
+                    if score > best_any_score:
+                        best_any_score = score
+                        best_any = article
+                    is_new = cand['url'] not in seen and cand['url'] not in new_seen
+                    if is_new and score > best_unseen_score:
+                        best_unseen_score = score
+                        best_unseen = article
                 except Exception as e:
                     print(f'    err: {e}')
-                    new_seen.discard(cand['url'])
 
-            if best:
-                articles[cat_key] = best
-                new_seen.add(best['url'])
-                print(f'  🏆 {best["title"][:40]} [{best_score:.1f}分]')
+            chosen = best_unseen or best_any
+            if chosen:
+                articles[cat_key] = chosen
+                if chosen is best_unseen:
+                    new_seen.add(chosen['url'])
+                    print(f'  🏆 {chosen["title"][:40]} [{best_unseen_score:.1f}分] (新稿)')
+                else:
+                    print(f'  🏆 {chosen["title"][:40]} [{best_any_score:.1f}分] (当期最新)')
+            else:
+                # 整栏抓取失败, 尝试从归档补位
+                last, last_date = get_last_article_for_cat(cat_key)
+                if last:
+                    last2 = dict(last)
+                    last2['backfilled'] = True
+                    last2['backfill_from'] = last_date or ''
+                    articles[cat_key] = last2
+                    print(f'  🔄 抓取失败, 复用 {last_date} 的《{last.get("title", "?")[:30]}》')
+                else:
+                    print('  ⚠️ 该栏目无内容且无归档历史')
             time.sleep(1)
         except Exception as e:
             print(f'  {cat_cfg["label"]} error: {e}')
