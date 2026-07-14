@@ -1244,25 +1244,18 @@ async function servePhrasesPage(env) {
   }
 
   const sortedWords = Object.entries(allWords).sort((a, b) => b[1].count - a[1].count);
-  const topWords = sortedWords.slice(0, 30);
-  // 加载 top 成语的释义
-  const wordDefs = await loadChengyuDefs(env, topWords.map(([w]) => w));
+  // 加载全部成语释义（分批，避免超时）
+  const allWordList = sortedWords.map(([w]) => w);
+  const wordDefs = await loadChengyuDefs(env, allWordList);
 
-  const wordsHTML = topWords.length ? topWords.map(([w, info]) => `
-    <div class="word-card">
-      <div class="w"><span class="w-text">${w}</span><span class="x-count">×${info.count}</span></div>
-      <div class="d">${escHtml(wordDefs[w] || '加载中...')}</div>
-    </div>
-  `).join('') : '<p style="color:var(--stone)">暂无</p>';
+  // 成语卡片 JSON（供前端翻页）
+  const wordsJSON = sortedWords.map(([w, info]) => ({
+    w, c: info.count, d: wordDefs[w] || '加载中...', cats: [...info.cats]
+  }));
 
-  const sortedHL = Object.entries(allHighlights).sort((a, b) => b[1].count - a[1].count).slice(0, 30);
-  const goldenHTML = sortedHL.length ? sortedHL.map(([text, info]) => `
-    <div class="golden-item">
-      <span class="g-type">${esc(info.type)} <span style="color:var(--stone);font-weight:400">×${info.count}</span></span>
-      <div class="g-text">${esc(text)}</div>
-      <div style="font-size:.75rem;color:var(--steel);margin-top:6px">${[...info.cats].join(' · ')}</div>
-    </div>
-  `).join('') : '<p style="color:var(--stone)">暂无</p>';
+  // 金句卡片 JSON
+  const goldenJSON = Object.entries(allHighlights).sort((a, b) => b[1].count - a[1].count)
+    .map(([text, info]) => ({ t: text, c: info.count, type: info.type, cats: [...info.cats] }));
 
   return htmlResponse(`<!DOCTYPE html>
 <html lang="zh-CN">
@@ -1282,6 +1275,64 @@ async function servePhrasesPage(env) {
 </script>
 <title>好词金句 · 申论议论文</title>
 <style>${BASE_CSS}</style>
+<style>
+/* ── 好词金句库专用样式 ── */
+.phrase-lib{max-width:var(--content-width);margin:0 auto}
+
+/* Tab 栏 */
+.lib-tabs{display:flex;gap:0;border-bottom:2px solid var(--hairline-strong);margin-bottom:24px}
+.lib-tab{flex:1;text-align:center;padding:14px 20px;font-size:1rem;font-weight:600;color:var(--slate);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:all var(--duration) var(--ease);font-family:var(--serif);letter-spacing:.5px}
+.lib-tab:hover{color:var(--ink);background:var(--surface-soft)}
+.lib-tab.active{color:var(--seal);border-bottom-color:var(--seal)}
+.lib-tab .tab-count{display:inline-block;font-size:.75rem;font-weight:400;color:var(--stone);margin-left:6px;padding:1px 8px;border-radius:var(--radius-full);background:var(--surface)}
+
+/* 统计栏 */
+.lib-stats{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:20px;padding:14px 18px;background:var(--canvas);border-radius:var(--radius);border:1px solid var(--hairline-soft);font-size:.85rem;color:var(--slate)}
+.lib-stats strong{color:var(--ink);font-weight:600}
+
+/* 翻页控件 */
+.pager{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;padding:10px 0;border-bottom:1px solid var(--hairline-soft)}
+.pager-info{font-size:.85rem;color:var(--stone)}
+.pager-info em{color:var(--seal);font-style:normal;font-weight:600}
+.pager-btns{display:flex;gap:4px}
+.pager-btn{padding:6px 14px;border-radius:var(--radius-sm);border:1px solid var(--hairline);background:var(--canvas);color:var(--slate);font-size:.85rem;font-weight:500;cursor:pointer;transition:all var(--duration) var(--ease)}
+.pager-btn:hover:not(:disabled){border-color:var(--seal);color:var(--seal);background:var(--seal-soft)}
+.pager-btn:disabled{opacity:.35;cursor:not-allowed}
+.pager-btn.active{background:var(--seal);color:#fff;border-color:var(--seal)}
+
+/* 成语卡片（紧凑版） */
+.idiom-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px}
+.idiom-card{background:var(--canvas);border-radius:var(--radius);border:1px solid var(--hairline-soft);padding:14px 16px;transition:all .15s var(--ease);cursor:default;display:flex;flex-direction:column;gap:6px}
+.idiom-card:hover{border-color:var(--hairline-strong);box-shadow:var(--shadow-sm);transform:translateY(-1px)}
+.idiom-card .ic-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.idiom-card .ic-word{font-size:1.05rem;font-weight:700;color:var(--ink);font-family:var(--serif)}
+.idiom-card .ic-badge{font-size:.72rem;font-weight:500;color:var(--seal);background:var(--seal-soft);padding:2px 9px;border-radius:var(--radius-full);white-space:nowrap}
+.idiom-card .ic-def{font-size:.8125rem;line-height:1.65;color:var(--slate)}
+.idiom-card .ic-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:2px}
+.idiom-card .ic-tag{font-size:.7rem;color:var(--steel);background:var(--surface-soft);padding:1px 7px;border-radius:4px}
+
+/* 金句卡片（紧凑版） */
+.golden-grid{display:flex;flex-direction:column;gap:10px}
+.golden-card{background:var(--gold-bg);border-radius:var(--radius);border-left:3px solid var(--gold);padding:14px 18px;transition:all .15s var(--ease)}
+.golden-card:hover{box-shadow:var(--shadow-sm);transform:translateX(2px)}
+.golden-card .gc-meta{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.gc-type{font-size:.72rem;font-weight:600;color:var(--primary);background:var(--primary-light);padding:2px 9px;border-radius:var(--radius-full)}
+.gc-count{font-size:.75rem;color:var(--stone)}
+.gc-text{font-family:"FangSong","STFangsong","仿宋",var(--serif);font-size:.95rem;line-height:1.85;color:var(--ink)}
+.gc-cats{display:flex;gap:4px;flex-wrap:wrap;margin-top:8px}
+.gc-cat{font-size:.7rem;color:var(--steel);background:var(--paper-3);padding:1px 7px;border-radius:4px}
+
+/* 空状态 */
+.lib-empty{text-align:center;padding:60px 20px;color:var(--stone);font-size:.95rem}
+.lib-empty-icon{font-size:2.5rem;margin-bottom:12px;opacity:.5}
+
+@media(max-width:640px){
+  .idiom-grid{grid-template-columns:1fr}
+  .lib-tabs{flex-direction:gap:0}
+  .lib-tab{padding:12px 14px;font-size:.9rem}
+  .pager{flex-direction:column;gap:8px;text-align:center}
+}
+</style>
 </head>
 <body>
 <header class="site-header">
@@ -1297,16 +1348,154 @@ async function servePhrasesPage(env) {
   </div>
 </header>
 <main class="main-content">
+<div class="phrase-lib">
   <h1 class="page-title">📝 好词金句库</h1>
-  <p class="page-sub">从 ${dates.length} 天文章中提取的高频成语 · 悬停词条查看完整释义（由 AI 生成）</p>
+  <p class="page-sub">从 ${dates.length} 天文章中累积提取 · 点击切换分类 · 分页浏览</p>
 
-  <h2 class="section-title">📖 关键词</h2>
-  <div class="words-grid" style="margin-bottom:32px">${wordsHTML}</div>
+  <!-- Tab 栏 -->
+  <div class="lib-tabs">
+    <div class="lib-tab active" data-lib="idiom" onclick="switchLib('idiom')">📖 成语词库 <span class="tab-count">${sortedWords.length} 条</span></div>
+    <div class="lib-tab" data-lib="golden" onclick="switchLib('golden')">✨ 金句摘录 <span class="tab-count">${goldenJSON.length} 条</span></div>
+  </div>
 
-  <h2 class="section-title">✨ 金句摘录</h2>
-  <div class="golden-list">${goldenHTML}</div>
+  <!-- 统计 -->
+  <div class="lib-stats">
+    <span>📅 数据来源：<strong>${dates.length}</strong> 天文章</span>
+    <span>📖 成语总数：<strong>${sortedWords.length}</strong> 个</span>
+    <span>✨ 金句总数：<strong>${goldenJSON.length}</strong> 条</span>
+  </div>
+
+  <!-- 成语面板 -->
+  <div id="panelIdiom">
+    <div class="pager" id="pagerIdiom">
+      <div class="pager-info" id="infoIdiom"></div>
+      <div class="pager-btns" id="btnsIdiom"></div>
+    </div>
+    <div class="idiom-grid" id="gridIdiom"></div>
+  </div>
+
+  <!-- 金句面板 -->
+  <div id="panelGolden" style="display:none">
+    <div class="pager" id="pagerGolden">
+      <div class="pager-info" id="infoGolden"></div>
+      <div class="pager-btns" id="btnsGolden"></div>
+    </div>
+    <div class="golden-grid" id="gridGolden"></div>
+  </div>
+</div>
 </main>
 <footer class="site-footer"><div class="footer-brand">申论议论文 · 每日精选</div><div>来源：人民网 · 观点频道</div></footer>
+
+<script>
+// ── 数据 ──
+var WORDS_DATA = ${JSON.stringify(wordsJSON)};
+var GOLDEN_DATA = ${JSON.stringify(goldenJSON)};
+var PAGE_SIZE = 12;
+
+// ── 状态 ──
+var currentLib = 'idiom';
+var idiomsPage = 1;
+var goldenPage = 1;
+
+function escH(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+// ── 切换 Tab ──
+function switchLib(lib){
+  currentLib=lib;
+  document.querySelectorAll('.lib-tab').forEach(function(t){t.classList.toggle('active',t.dataset.lib===lib);});
+  document.getElementById('panelIdiom').style.display=(lib==='idiom')?'block':'none';
+  document.getElementById('panelGolden').style.display=(lib==='golden')?'block':'none';
+  if(lib==='idiom') renderIdioms();
+  else renderGolden();
+}
+
+// ── 成语渲染 ──
+function renderIdioms(){
+  var data=WORDS_DATA;
+  var total=data.length;
+  var totalPages=Math.ceil(total/PAGE_SIZE)||1;
+  if(idiomsPage>totalPages) idiomsPage=totalPages;
+  if(idiomsPage<1) idiomsPage=1;
+  var start=(idiomsPage-1)*PAGE_SIZE;
+  var pageData=data.slice(start,start+PAGE_SIZE);
+
+  // 翻页信息
+  document.getElementById('infoIdiom').innerHTML='第 <em>'+idiomsPage+'</em> / '+totalPages+' 页，共 <em>'+total+'</em> 条';
+
+  // 翻页按钮
+  var btns='';
+  for(var i=1;i<=Math.min(totalPages,7);i++){
+    btns+='<button class="pager-btn'+(i===idiomsPage?' active':'')+'" onclick="goPage('+i+')">'+i+'</button>';
+  }
+  if(totalPages>7){
+    if(idiomsPage>4) btns+='<span style="color:var(--muted);padding:0 4px">…</span>';
+    if(idiomsPage<totalPages-2&&idiomsPage>4) btns+='<button class="pager-btn'+(idiomsPage===totalPages?' active':'')+'" onclick="goPage('+totalPages+')">'+totalPages+'</button>';
+  }
+  btns='<button class="pager-btn" onclick="goPage('+(idiomsPage-1)+')" '+(idiomsPage<=1?'disabled':'')+'>◀ 上页</button>'+btns+'<button class="pager-btn" onclick="goPage('+(idiomsPage+1)+')" '+(idiomsPage>=totalPages?'disabled':'')+'>下页 ▶</button>';
+  document.getElementById('btnsIdiom').innerHTML=btns;
+
+  // 卡片
+  if(pageData.length===0){
+    document.getElementById('gridIdiom').innerHTML='<div class="lib-empty"><div class="lib-empty-icon">📖</div>暂无成语数据</div>';
+    return;
+  }
+  var html='';
+  pageData.forEach(function(item){
+    html+='<div class="idiom-card"><div class="ic-head"><span class="ic-word">'+escH(item.w)+'</span><span class="ic-badge">×'+item.c+'</span></div><div class="ic-def">'+escH(item.d)+'</div><div class="ic-tags">'+item.cats.map(function(c){return '<span class="ic-tag">'+escH(c)+'</span>';}).join('')+'</div></div>';
+  });
+  document.getElementById('gridIdiom').innerHTML=html;
+}
+
+function goPage(p){
+  idiomsPage=p;
+  renderIdioms();
+  document.getElementById('panelIdiom').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+// ── 金句渲染 ──
+function renderGolden(){
+  var data=GOLDEN_DATA;
+  var total=data.length;
+  var totalPages=Math.ceil(total/PAGE_SIZE)||1;
+  if(goldenPage>totalPages) goldenPage=totalPages;
+  if(goldenPage<1) goldenPage=1;
+  var start=(goldenPage-1)*PAGE_SIZE;
+  var pageData=data.slice(start,start+PAGE_SIZE);
+
+  document.getElementById('infoGolden').innerHTML='第 <em>'+goldenPage+'</em> / '+totalPages+' 页，共 <em>'+total+'</em> 条';
+
+  var btns='';
+  for(var i=1;i<=Math.min(totalPages,7);i++){
+    btns+='<button class="pager-btn'+(i===goldenPage?' active':'')+'" onclick="goGPage('+i+')">'+i+'</button>';
+  }
+  if(totalPages>7){
+    if(goldenPage>4) btns+='<span style="color:var(--muted);padding:0 4px">…</span>';
+    if(goldenPage<totalPages-2&&goldenPage>4) btns+='<button class="pager-btn"+(goldenPage===totalPages?' active':'')+'" onclick="goGPage('+totalPages+')">'+totalPages+'</button>';
+  }
+  btns='<button class="pager-btn" onclick="goGPage('+(goldenPage-1)+')" '+(goldenPage<=1?'disabled':'')+'>◀ 上页</button>'+btns+'<button class="pager-btn" onclick="goGPage('+(goldenPage+1)+')" '+(goldenPage>=totalPages?'disabled':'')+'>下页 ▶</button>';
+  document.getElementById('btnsGolden').innerHTML=btns;
+
+  if(pageData.length===0){
+    document.getElementById('gridGolden').innerHTML='<div class="lib-empty"><div class="lib-empty-icon">✨</div>暂无金句数据</div>';
+    return;
+  }
+  var html='';
+  pageData.forEach(function(item){
+    html+='<div class="golden-card"><div class="gc-meta"><span class="gc-type">'+escH(item.type||'引用')+'</span><span class="gc-count">×'+item.c+'</span></div><div class="gc-text">'+escH(item.t)+'</div><div class="gc-cats">'+item.cats.map(function(c){return '<span class="gc-cat">'+escH(c)+'</span>';}).join('')+'</div></div>';
+  });
+  document.getElementById('gridGolden').innerHTML=html;
+}
+
+function goGPage(p){
+  goldenPage=p;
+  renderGolden();
+  document.getElementById('panelGolden').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+// ── 初始化 ──
+renderIdioms();
+renderGolden();
+</script>
 </body>
 </html>`);
 }
