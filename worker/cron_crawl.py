@@ -423,20 +423,48 @@ def score_article(article, cat_key, col_name):
 
 
 # ── 归档补位: 整栏抓取失败时, 取该栏目最近一次的历史文章 ──
-def get_last_article_for_cat(cat):
+def find_backfill_article(cat, yesterday_urls):
+    """按周往前翻历史归档, 挑评分高且未用过的, 限 6 个月内"""
+    from datetime import timedelta as _td
     try:
         man_raw = kv_get('manifest')
-        dates = json.loads(man_raw).keys() if man_raw else []
+        dates = sorted(json.loads(man_raw).keys(), reverse=True) if man_raw else []
     except Exception:
         dates = []
-    for d in sorted(dates, reverse=True):
+    if not dates:
+        return None, None
+
+    cutoff = (datetime.now() - _td(days=180)).strftime('%Y-%m-%d')  # 6 个月窗口
+    best, best_date, best_score = None, None, -1
+    weeks_checked = 0
+    last_week = None
+    for d in dates:
+        if d < cutoff:
+            break  # 超出 6 个月, 停止
         try:
             ad = json.loads(kv_get(f'articles/{d}') or '{}')
         except Exception:
             continue
-        if cat in ad and ad[cat].get('title'):
-            return ad[cat], d
-    return None, None
+        if cat not in ad:
+            continue
+        art = ad[cat]
+        url = art.get('url', '')
+        if not art.get('title'):
+            continue
+        if url in yesterday_urls:
+            continue  # 只避免与昨天重复, 更早的旧文允许复用
+        s = art.get('score', 0)
+        if not s:
+            s = min(len(art.get('content', '')) / 100.0, 40)
+        import datetime as _dt
+        wk = _dt.date.fromisoformat(d).isocalendar()[:2]
+        if wk != last_week:
+            weeks_checked += 1
+            last_week = wk
+        s -= weeks_checked * 0.5
+        if s > best_score:
+            best_score, best, best_date = s, art, d
+    return best, best_date
 
 
 # ── Main ──
@@ -523,6 +551,7 @@ def main():
                     print(f'    ⚠️ Best candidate was used yesterday, skipping...')
             if chosen:
                 articles[cat_key] = chosen
+                chosen['score'] = best_unseen_score if chosen is best_unseen else best_any_score
                 if chosen is best_unseen:
                     new_seen.add(chosen['url'])
                     print(f'  🏆 {chosen["title"][:40]} [{best_unseen_score:.1f}分] (新稿)')
@@ -532,15 +561,23 @@ def main():
                     print(f'  🏆 {chosen["title"][:40]} [{best_any_score:.1f}分] (当期最新)')
             else:
                 # 整栏抓取失败, 尝试从归档补位
-                last, last_date = get_last_article_for_cat(cat_key)
+                last, last_date = find_backfill_article(cat_key, yesterday_urls)
                 if last:
                     last2 = dict(last)
                     last2['backfilled'] = True
                     last2['backfill_from'] = last_date or ''
                     articles[cat_key] = last2
-                    print(f'  🔄 抓取失败, 复用 {last_date} 的《{last.get("title", "?")[:30]}》')
+                    print(f'  🔄 归档补位: {last_date} 《{last.get("title", "?")[:30]}》')
                 else:
-                    print('  ⚠️ 该栏目无内容且无归档历史')
+                    # 最终兜底: 连 6 个月归档都没有, 才用源站当期最新 (保证 8 栏不空)
+                    if best_any:
+                        last2 = dict(best_any)
+                        last2['backfilled'] = True
+                        last2['backfill_from'] = today
+                        articles[cat_key] = last2
+                        print(f'  🔄 兜底复用当期最新: 《{best_any.get("title", "?")[:30]}》')
+                    else:
+                        print('  ⚠️ 该栏目 无可用归档且源站无候选')
             time.sleep(1)
         except Exception as e:
             print(f'  {cat_cfg["label"]} error: {e}')

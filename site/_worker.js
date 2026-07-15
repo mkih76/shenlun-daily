@@ -823,7 +823,7 @@ async function serveHomePage(env) {
         <p class="card-excerpt">${esc(excerpt)}</p>
       </div>
       <div class="card-footer">
-        ${art.backfill_from ? '<span class="badge badge-bf">📋 昨日转载</span>' : ''}
+        ${art.backfill_from ? `<span class="badge badge-bf">📋 转载 ${art.backfill_from}</span>` : ''}
         ${phraseCount > 0 ? `<span class="badge">📝 ${phraseCount}好词</span>` : ''}
         ${hlCount > 0 ? `<span class="badge">✨ ${hlCount}金句</span>` : ''}
         ${art.pub_date ? `<span>${art.pub_date}</span>` : ''}
