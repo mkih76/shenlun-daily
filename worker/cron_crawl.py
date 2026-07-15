@@ -168,8 +168,7 @@ CAT_KEYWORDS = {
 }
 
 CHENGYU_LIST = {
-    '标本兼治','顶层设计','中国式现代化','高质量发展','共同富裕','新质生产力',
-    '全过程人民民主','自我革命','以人民为中心','全面从严治党','共建共治共享','一带一路',
+    '标本兼治','顶层设计','共同富裕','自我革命','一带一路',
     '驰而不息','久久为功','踏石留印','抓铁有痕','求真务实','真抓实干',
     '身体力行','率先垂范','一以贯之','徙木立信','循序渐进','稳中求进',
     '行稳致远','提质增效','转型升级','以文化人','潜移默化','润物无声',
@@ -182,7 +181,7 @@ CHENGYU_LIST = {
     '毋庸置疑','显而易见','知行合一','扎实推进','稳步推进','取得实效',
     '啃硬骨头','同向发力','同频共振','重点突破','以点带面','压茬推进',
     '稳中向好','稳中有进','降本增效','问计于民','调查研究',
-    '四个意识','四个自信','两个维护','两个确立','不敢腐','不能腐','不想腐',
+    '四个意识','四个自信','两个维护','两个确立',
     '天人合一','万物并育','绿水青山','金山银山','克己奉公','夙夜在公',
 }
 
@@ -444,12 +443,13 @@ def extract_content(html, markers):
 # ── 列表链接抽取（按源规则）──
 def extract_article_links(html, src):
     links, seen = [], set()
-    rx = re.compile(r'href=["\']([^"\']+)["\'][^>]*>\s*([^<]{4,60})\s*</a>', re.I)
+    # 允许 <a> 内部嵌套标签（如 <span>），抓到整段后剥离标签再判长度
+    rx = re.compile(r'href=["\']([^"\']+)["\'][^>]*>(.*?)</a>', re.I | re.S)
     for m in rx.finditer(html):
         href = m.group(1)
         if not re.search(src['link_re'], href):
             continue
-        title = m.group(2).strip()
+        title = re.sub(r'\s+', ' ', re.sub(r'<[^>]+>', '', m.group(2))).strip()
         if len(title) < 6:
             continue
         full = href if href.startswith('http') else src['link_base'].rstrip('/') + '/' + href.lstrip('/')
@@ -457,13 +457,7 @@ def extract_article_links(html, src):
             continue
         seen.add(full)
         dm = re.search(src['date_re'], full)
-        if dm:
-            if src.get('is_people'):
-                date_str = f'{dm.group(1)}-{dm.group(2)}-{dm.group(3)}'
-            else:
-                date_str = f'{dm.group(1)}-{dm.group(2)}-{dm.group(3)}'
-        else:
-            date_str = ''
+        date_str = f'{dm.group(1)}-{dm.group(2)}-{dm.group(3)}' if dm else ''
         links.append({'url': full, 'title_hint': title, 'date_str': date_str})
     return sorted(links, key=lambda x: x['date_str'] or '0000', reverse=True)
 
@@ -472,7 +466,10 @@ def extract_article(html, url, src):
     title = ''
     m = re.search(src['title_re'], html, re.I)
     if m:
-        title = m.group(1).strip()
+        t = m.group(1).strip()
+        # 过滤 class="title" 误命中导航/面包屑的情况
+        if not re.search(r'(首页|导航|您的位置|当前位置|>>|站内|栏目|位置：)', t):
+            title = t
     if not title or not re.search(r'[\u4e00-\u9fa5]', title):
         m = re.search(r'<title>([^<]+)</title>', html, re.I)
         if m:
