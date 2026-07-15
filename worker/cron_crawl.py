@@ -1,31 +1,36 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
-VPS 端每日抓取脚本
-- 抓取人民网 8 个栏目，质量评分选优
+VPS 端每日抓取脚本（多源版）
+- 同时抓取 人民网 / 新华网 / 求是网 多个权威源站，质量评分选优
 - 写入 CF KV
-- 调 CF Workers AI 生成成语释义
+- 调 CF Workers AI（硅基流动）生成成语释义
 
-VPS 上添加 cron（凭据放在脚本同目录的 .env 中，见 .env.example）:
-  crontab -e
-  0 8 * * * /usr/bin/python3 /opt/shenlun/cron_crawl.py >> /var/log/shenlun-cron.log 2>&1
+VPS 上 crontab -e:
+  0 12 * * * /usr/bin/python3 /opt/shenlun/cron_crawl.py >> /var/log/shenlun-cron.log 2>&1
+  （UTC 12:00 = 北京 20:00，确保源站已更新）
 
-  在 /opt/shenlun/.env 中填入：
+在 /opt/shenlun/.env 中填入：
   CF_API_TOKEN=xxx
   CF_ACCOUNT_ID=xxx
   CF_KV_NAMESPACE_ID=xxx
   SILICONFLOW_API_KEY=xxx
+
+本地调试（不写 KV）:
+  DRYRUN=1 python3 cron_crawl.py
 """
 
 import os, sys, time, re, json, urllib.request, urllib.parse
 import io
-# Force UTF-8 stdout
 if sys.stdout.encoding != 'utf-8':
     sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
 if sys.stderr.encoding != 'utf-8':
     sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
 from datetime import datetime, timezone, timedelta
 
-# ── 自动加载同目录 .env（cron 环境默认没有用户环境变量，避免凭据为空导致写 KV 失败）──
+DRYRUN = os.environ.get('DRYRUN') == '1'
+
+# ── 自动加载同目录 .env ──
 def load_dotenv(path=None):
     if path is None:
         path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '.env')
@@ -44,22 +49,102 @@ def load_dotenv(path=None):
 
 load_dotenv()
 
-# ── 配置（敏感凭据从环境变量 / 同目录 .env 读取，切勿硬编码进仓库）──
+# ── 配置 ──
 CF_API_BASE = "https://api.cloudflare.com/client/v4"
 CF_TOKEN = os.environ.get("CF_API_TOKEN", "")
 CF_ACCOUNT = os.environ.get("CF_ACCOUNT_ID", "")
 CF_KV_NS = os.environ.get("CF_KV_NAMESPACE_ID", "")
-# 成语释义已改用硅基流动 API（见下方 SF_API_KEY），不再使用 Workers AI
 
+# ── 多源抽取规则 ──
+# 每个源定义：名称、列表页链接正则、链接基址、日期正则、标题正则、正文容器标记、防盗链 Referer、基础作者分
+SOURCES = {
+    'people': {
+        'name': '人民网',
+        'referer': None,
+        'link_base': 'http://opinion.people.com.cn',
+        'link_re': r'/n1/\d{4}/\d{4}/c\d+-\d+\.html',
+        'date_re': r'/n1/(\d{4})/(\d{2})(\d{2})/',
+        'title_re': r'<h1[^>]*>([^<]{4,60})</h1>',
+        'content_markers': [
+            r'<div[^>]*id=["\']rm_txt_zw["\']',
+            r'<div[^>]*class=["\']rm_txt_con[^"\']*["\']',
+            r'<div[^>]*class=["\']rm_txt["\']',
+            r'<div[^>]*id=["\']ozoom["\']',
+        ],
+        'base_author_score': 1,
+        'is_people': True,
+    },
+    'xinhua': {
+        'name': '新华网',
+        'referer': 'https://www.news.cn/',
+        'link_base': 'https://www.news.cn',
+        'link_re': r'/\d{8}/[0-9a-f]{16,}/c\.html',
+        'date_re': r'/(\d{4})(\d{2})(\d{2})/',
+        'title_re': r'class=["\'][^"\']*title[^"\']*["\'][^>]*>([^<]{4,80})</',
+        'content_markers': [
+            r'<div[^>]*id=["\']detail["\']',
+        ],
+        'base_author_score': 6,
+        'is_people': False,
+    },
+    'qushi': {
+        'name': '求是网',
+        'referer': None,
+        'link_base': 'https://www.qstheory.cn',
+        'link_re': r'/20\d{6}/[0-9a-f]{20,}/c\.html',
+        'date_re': r'/(\d{4})(\d{2})(\d{2})/',
+        'title_re': r'<h1[^>]*>([^<]{4,80})</h1>',
+        'content_markers': [
+            r'<div[^>]*class=["\'][^"\']*content[^"\']*["\']',
+        ],
+        'base_author_score': 6,
+        'is_people': False,
+    },
+}
+
+# ── 分类 → 多源列表页 ──
+# 每个分类挂多个源站列表页，爬虫轮询所有源凑候选，按关键词评分择优。
 CATEGORIES = {
-    '作风类': {'label': '工作作风', 'color': '#C00000', 'url': 'http://opinion.people.com.cn/GB/8213/49160/457596/index.html'},
-    '党建类': {'label': '党的建设', 'color': '#8B0000', 'url': 'http://opinion.people.com.cn/GB/8213/49160/49217/index.html'},
-    '经济类': {'label': '经济建设', 'color': '#0070C0', 'url': 'http://opinion.people.com.cn/GB/8213/49160/461970/index.html'},
-    '科技类': {'label': '科技创新', 'color': '#7030A0', 'url': 'http://opinion.people.com.cn/GB/51854/index.html'},
-    '民生类': {'label': '民生保障', 'color': '#00884A', 'url': 'http://opinion.people.com.cn/GB/51863/index.html'},
-    '生态类': {'label': '生态文明', 'color': '#385723', 'url': 'http://opinion.people.com.cn/GB/223228/index.html'},
-    '文化类': {'label': '文化建设', 'color': '#B8860B', 'url': 'http://opinion.people.com.cn/GB/364183/index.html'},
-    '治理类': {'label': '社会治理', 'color': '#404040', 'url': 'http://opinion.people.com.cn/GB/8213/49160/461964/index.html'},
+    '作风类': {'label': '工作作风', 'color': '#C00000', 'sources': [
+        {'src': 'people', 'url': 'http://opinion.people.com.cn/GB/8213/49160/457596/index.html'},
+        {'src': 'xinhua', 'url': 'https://www.news.cn/comments/'},
+        {'src': 'qushi',  'url': 'https://www.qstheory.cn/'},
+    ]},
+    '党建类': {'label': '党的建设', 'color': '#8B0000', 'sources': [
+        {'src': 'people', 'url': 'http://opinion.people.com.cn/GB/8213/49160/49217/index.html'},
+        {'src': 'xinhua', 'url': 'https://www.news.cn/politics/'},
+        {'src': 'qushi',  'url': 'https://www.qstheory.cn/'},
+    ]},
+    '经济类': {'label': '经济建设', 'color': '#0070C0', 'sources': [
+        {'src': 'people', 'url': 'http://opinion.people.com.cn/GB/8213/49160/461970/index.html'},
+        {'src': 'xinhua', 'url': 'https://www.news.cn/comments/'},
+        {'src': 'qushi',  'url': 'https://www.qstheory.cn/'},
+    ]},
+    '科技类': {'label': '科技创新', 'color': '#7030A0', 'sources': [
+        {'src': 'people', 'url': 'http://opinion.people.com.cn/GB/51854/index.html'},
+        {'src': 'xinhua', 'url': 'https://www.news.cn/tech/'},
+        {'src': 'qushi',  'url': 'https://www.qstheory.cn/'},
+    ]},
+    '民生类': {'label': '民生保障', 'color': '#00884A', 'sources': [
+        {'src': 'people', 'url': 'http://opinion.people.com.cn/GB/51863/index.html'},
+        {'src': 'xinhua', 'url': 'https://www.news.cn/comments/'},
+        {'src': 'qushi',  'url': 'https://www.qstheory.cn/'},
+    ]},
+    '生态类': {'label': '生态文明', 'color': '#385723', 'sources': [
+        {'src': 'people', 'url': 'http://opinion.people.com.cn/GB/223228/index.html'},
+        {'src': 'xinhua', 'url': 'https://www.news.cn/comments/'},
+        {'src': 'qushi',  'url': 'https://www.qstheory.cn/'},
+    ]},
+    '文化类': {'label': '文化建设', 'color': '#B8860B', 'sources': [
+        {'src': 'people', 'url': 'http://opinion.people.com.cn/GB/364183/index.html'},
+        {'src': 'xinhua', 'url': 'https://www.news.cn/culture/'},
+        {'src': 'qushi',  'url': 'https://www.qstheory.cn/'},
+    ]},
+    '治理类': {'label': '社会治理', 'color': '#404040', 'sources': [
+        {'src': 'people', 'url': 'http://opinion.people.com.cn/GB/8213/49160/461964/index.html'},
+        {'src': 'xinhua', 'url': 'https://www.news.cn/comments/'},
+        {'src': 'qushi',  'url': 'https://www.qstheory.cn/'},
+    ]},
 }
 
 AUTHOR_SCORES = {
@@ -67,6 +152,8 @@ AUTHOR_SCORES = {
     '人民论坛':7,'人民时评':7,'评论员观察':7,'人民观点':7,'人民锐评':6,
     '人民网评':6,'望海楼':6,'今日谈':5,'金台随笔':5,'暖闻热评':5,
     '每周经济评论':5,'纵横':4,'来论':3,
+    '新华社评论员':8,'新华网评':7,'新华时评':7,'新华社':5,
+    '求是网':6,'《求是》':7,'求是杂志':8,'央视网评':6,'央视快评':7,'光明时评':5,
 }
 
 CAT_KEYWORDS = {
@@ -96,13 +183,15 @@ CHENGYU_LIST = {
     '啃硬骨头','同向发力','同频共振','重点突破','以点带面','压茬推进',
     '稳中向好','稳中有进','降本增效','问计于民','调查研究',
     '四个意识','四个自信','两个维护','两个确立','不敢腐','不能腐','不想腐',
+    '天人合一','万物并育','绿水青山','金山银山','克己奉公','夙夜在公',
 }
 
 POLICY_TERMS = ['中国式现代化','高质量发展','共同富裕','乡村振兴','新质生产力','全过程人民民主','自我革命','以人民为中心','全面从严治党','标本兼治','顶层设计','制度型开放','获得感幸福感安全感','创造性转化创新性发展','百年未有之大变局','人类命运共同体','一带一路','不敢腐不能腐不想腐','共建共治共享','四个意识','四个自信','两个维护','两个确立']
 
-
 # ── CF KV helpers ──
 def kv_put(key, value, ttl=None):
+    if DRYRUN:
+        return True
     url = f'{CF_API_BASE}/accounts/{CF_ACCOUNT}/storage/kv/namespaces/{CF_KV_NS}/values/{urllib.parse.quote(key, safe="")}'
     headers = {'Authorization': f'Bearer {CF_TOKEN}'}
     if ttl: headers['Expiration-TTL'] = str(ttl)
@@ -111,8 +200,9 @@ def kv_put(key, value, ttl=None):
     with urllib.request.urlopen(req, timeout=15) as r:
         return r.status == 200
 
-
 def kv_get(key):
+    if DRYRUN:
+        return None
     url = f'{CF_API_BASE}/accounts/{CF_ACCOUNT}/storage/kv/namespaces/{CF_KV_NS}/values/{urllib.parse.quote(key, safe="")}'
     headers = {'Authorization': f'Bearer {CF_TOKEN}'}
     req = urllib.request.Request(url, headers=headers)
@@ -122,12 +212,10 @@ def kv_get(key):
     except:
         return None
 
-
-# ── 硅基流动 API 释义（Key 从环境变量 SILICONFLOW_API_KEY 读取）──
+# ── 硅基流动 API 释义 ──
 SF_API_KEY = os.environ.get("SILICONFLOW_API_KEY", "")
 
 def ai_define_chengyu(word):
-    """硅基流动 Qwen2.5-7B 生成释义"""
     try:
         body = json.dumps({
             'model': 'Qwen/Qwen2.5-7B-Instruct',
@@ -149,8 +237,6 @@ def ai_define_chengyu(word):
     except Exception:
         return None
 
-
-# 兜底字典: 100+ 高频成语
 CHENGYU_FALLBACK = {
     '标本兼治': '既解决表层问题，又解决根源问题，通过加强制度建设和思想教育，从根本上消除问题产生的土壤和条件。',
     '久久为功': '持之以恒、锲而不舍，长期坚持做事方能见到成效。',
@@ -207,7 +293,6 @@ CHENGYU_FALLBACK = {
     '稳字当头': '把稳定作为首要任务和前提。',
     '稳中向好': '在稳定中向好的方向发展。',
     '稳中有进': '在稳定的基础上有进步。',
-    '一以贯之': '用同一个道理贯穿始终。',
     '不偏不倚': '不偏向任何一方，保持公正中立。',
     '相辅相成': '互相帮助，互相补充。',
     '相得益彰': '互相帮助、互相补充，更显所长。',
@@ -219,7 +304,6 @@ CHENGYU_FALLBACK = {
     '以点带面': '通过个别的、典型的事例带动全面的工作。',
     '同向发力': '朝着同一个方向共同努力。',
     '同频共振': '节奏一致、配合默契。',
-    '整体推进': '从全局出发全面推进。',
     '走深走实': '深入推进、扎实落实。',
     '扎实推进': '稳扎稳打地推进工作。',
     '稳步推进': '按步骤、按计划有序推进。',
@@ -260,18 +344,25 @@ CHENGYU_FALLBACK = {
     '两个维护': '坚决维护习近平总书记党中央的核心、全党的核心地位，坚决维护党中央权威。',
     '两个确立': '确立习近平同志党中央的核心、全党的核心地位，确立习近平新时代中国特色社会主义思想的指导地位。',
     '八项规定': '中央政治局关于改进工作作风、密切联系群众的八项规定。',
-    '众力': '众人的力量。',
+    '天人合一': '天道与人道、自然与人事相通相合，强调人与自然和谐共生。',
+    '万物并育': '万物共同发育而不相妨害，体现和而不同的包容智慧。',
+    '绿水青山': '指优良的生态环境，习称"绿水青山就是金山银山"。',
+    '金山银山': '指丰厚的物质财富，与绿水青山相辅相成。',
+    '克己奉公': '约束自己、一心为公，形容廉洁自守的品格。',
+    '夙夜在公': '从早到晚勤于公务，形容勤勉尽责。',
 }
 
-
 # ── HTTP fetch ──
-def fetch(url):
+def fetch(url, referer=None):
     try:
-        req = urllib.request.Request(url, headers={
+        headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-            'Accept': 'text/html,application/xhtml+xml',
+            'Accept': 'text/html,application/xhtml+xml,*/*;q=0.8',
             'Accept-Language': 'zh-CN,zh;q=0.9',
-        })
+        }
+        if referer:
+            headers['Referer'] = referer
+        req = urllib.request.Request(url, headers=headers)
         with urllib.request.urlopen(req, timeout=20) as r:
             body = r.read()
             ct = r.headers.get('Content-Type', '').lower()
@@ -286,60 +377,115 @@ def fetch(url):
     except Exception as e:
         return None
 
+# ── 平衡 div 提取（处理嵌套 div）──
+def grab_div_block(html, start_idx):
+    gt = html.find('>', start_idx)
+    if gt == -1:
+        return ''
+    depth = 1
+    i = gt + 1
+    n = len(html)
+    while i < n:
+        if html[i:i+4] == '<div':
+            depth += 1; i += 4
+        elif html[i:i+6] == '</div>':
+            depth -= 1; i += 6
+            if depth == 0:
+                return html[gt+1:i]
+        else:
+            i += 1
+    return html[gt+1:]
 
-# ── Article parsing ──
-def extract_article_links(html):
+# 文末样板话（用于截断无关内容）
+FOOTER_MARKS = ['责任编辑', '分享到', '相关阅读', '上一篇', '下一篇', '返回首页', '扫描二维码',
+                '微信扫一扫', '更多精彩', '版权所有', '违法和不良', '举报电话', '关注我们',
+                '【纠错】', '【打印】', '【关闭】', '客户端下载', '返回顶部', '热门推荐',
+                '延伸阅读', '推荐阅读', '本文来源', '来源：', '作者：', '编辑：']
+
+def trim_paras(paras):
+    # 去掉开头的导航/版权行
+    while paras and re.match(r'^(订阅|收藏|小字号|大字号|客户端下载|分享|热门排行|人民网|来源|编辑|责任编辑|扫描)', paras[0]):
+        paras.pop(0)
+    # 去掉结尾的样板话
+    while paras and any(m in paras[-1] for m in FOOTER_MARKS):
+        paras.pop()
+    return paras
+
+def extract_content(html, markers):
+    """用平衡 div 从标记容器内抽取正文段落；若太少则回退到旧式三重闭合。"""
+    for mk in markers:
+        m = re.search(mk, html, re.I)
+        if not m:
+            continue
+        block = grab_div_block(html, m.start())
+        paras = []
+        for pm in re.finditer(r'<p[^>]*>\s*(.+?)\s*</p>', block, re.I | re.DOTALL):
+            t = re.sub(r'<[^>]+>', '', pm[1])
+            t = re.sub(r'&[a-z]+;', ' ', t).strip()
+            if t and len(t) >= 4:
+                paras.append(t)
+        paras = trim_paras(paras)
+        if len(paras) >= 3:
+            return '\n\n'.join(paras)
+    # 回退：旧式三重闭合（兼容人民网部分页面）
+    for mk in markers:
+        m = re.search(mk + r'[^>]*>(.+?)</div>\s*</div>\s*</div>', html, re.I | re.DOTALL)
+        if m:
+            paras = []
+            for pm in re.finditer(r'<p[^>]*>\s*(.+?)\s*</p>', m[1], re.I | re.DOTALL):
+                t = re.sub(r'<[^>]+>', '', pm[1]).strip()
+                if t and len(t) >= 4:
+                    paras.append(t)
+            paras = trim_paras(paras)
+            if paras:
+                return '\n\n'.join(paras)
+    return ''
+
+# ── 列表链接抽取（按源规则）──
+def extract_article_links(html, src):
     links, seen = [], set()
-    for m in re.finditer(r"/n1/\d{4}/\d{4}/c\d+-\d+\.html", html):
-        path = m[0]
-        if path in seen: continue
-        after = html[m.end():m.end()+120]
-        tm = re.search(r'>([^<]{8,60})</a>', after)
-        if not tm: continue
-        title = tm[1].strip()
-        if len(title) < 6: continue
-        year, mmdd = re.search(r"/n1/(\d{4})/(\d{4})/", path).groups()
-        date_str = f'{year}-{mmdd[:2]}-{mmdd[2:]}'
-        url = f'http://opinion.people.com.cn{path}'
-        seen.add(path)
-        links.append({'url': url, 'title_hint': title, 'date_str': date_str})
-    return sorted(links, key=lambda x: x['date_str'], reverse=True)
+    rx = re.compile(r'href=["\']([^"\']+)["\'][^>]*>\s*([^<]{4,60})\s*</a>', re.I)
+    for m in rx.finditer(html):
+        href = m.group(1)
+        if not re.search(src['link_re'], href):
+            continue
+        title = m.group(2).strip()
+        if len(title) < 6:
+            continue
+        full = href if href.startswith('http') else src['link_base'].rstrip('/') + '/' + href.lstrip('/')
+        if full in seen:
+            continue
+        seen.add(full)
+        dm = re.search(src['date_re'], full)
+        if dm:
+            if src.get('is_people'):
+                date_str = f'{dm.group(1)}-{dm.group(2)}-{dm.group(3)}'
+            else:
+                date_str = f'{dm.group(1)}-{dm.group(2)}-{dm.group(3)}'
+        else:
+            date_str = ''
+        links.append({'url': full, 'title_hint': title, 'date_str': date_str})
+    return sorted(links, key=lambda x: x['date_str'] or '0000', reverse=True)
 
-
-def extract_article(html, url):
+# ── 正文抽取（按源规则）──
+def extract_article(html, url, src):
     title = ''
-    m = re.search(r'<h1[^>]*>([^<]{4,60})</h1>', html, re.I)
-    if m: title = m[1].strip()
+    m = re.search(src['title_re'], html, re.I)
+    if m:
+        title = m.group(1).strip()
     if not title or not re.search(r'[\u4e00-\u9fa5]', title):
         m = re.search(r'<title>([^<]+)</title>', html, re.I)
         if m:
             title = re.sub(r'[_\-\s]+—.*$', '', m[1]).strip().replace('--', ' ').strip()
 
-    content = ''
-    for pat in [
-        r'<div[^>]*id=["\']rm_txt_zw["\'][^>]*>(.+?)</div>\s*</div>\s*</div>',
-        r'<div[^>]*class=["\']rm_txt_con[^"\']*["\'][^>]*>(.+?)</div>\s*</div>\s*</div>',
-        r'<div[^>]*class=["\']rm_txt["\'][^>]*>(.+?)</div>\s*</div>\s*</div>',
-        r'<div[^>]*id=["\']ozoom["\'][^>]*>(.+?)</div>\s*</div>\s*</div>',
-    ]:
-        m = re.search(pat, html, re.I | re.DOTALL)
-        if m:
-            paras = []
-            for pm in re.finditer(r'<p[^>]*>\s*(.+?)\s*</p>', m[1], re.I | re.DOTALL):
-                t = re.sub(r'<[^>]+>', '', pm[1]).strip()
-                if t and len(t) >= 4 and not re.match(r'^(订阅|收藏|小字号|大字号|客户端下载|分享|热门排行|人民网)', t):
-                    paras.append(t)
-            while paras and re.search(r'《\s*人民日报\s*》|热门排行|客户端下载', paras[-1]):
-                paras.pop()
-            content = '\n\n'.join(paras)
-            break
+    content = extract_content(html, src['content_markers'])
 
     pub_date = ''
     m = re.search(r'(\d{4})年(\d{2})月(\d{2})日', content)
-    if m: pub_date = f'{m[1]}-{m[2]}-{m[3]}'
+    if m:
+        pub_date = f'{m.group(1)}-{m.group(2)}-{m.group(3)}'
 
-    return {'title': title, 'pub_date': pub_date, 'url': url, 'content': content}
-
+    return {'title': title, 'pub_date': pub_date, 'url': url, 'content': content, 'source': src['name']}
 
 def extract_column_info(html):
     for name in sorted(AUTHOR_SCORES.keys(), key=lambda x: -len(x)):
@@ -347,8 +493,7 @@ def extract_column_info(html):
             return name
     return ''
 
-
-# ── Quality scoring ──
+# ── 质量评分相关 ──
 def find_chengyu(text):
     if not text: return []
     found, seen = [], set()
@@ -358,7 +503,6 @@ def find_chengyu(text):
             found.append(m[0])
     return found
 
-
 def extract_phrases(text):
     if not text: return []
     words = set()
@@ -367,11 +511,9 @@ def extract_phrases(text):
         if term in text: words.add(term)
     return list(words)[:25]
 
-
 def extract_highlights(text):
     if not text: return []
     seen, results = set(), []
-
     def add(s, t):
         s = s.strip().rstrip('，。！？；：、')
         if not s or len(s) < 12 or len(s) > 200 or s in seen: return
@@ -379,11 +521,11 @@ def extract_highlights(text):
         if len(re.findall(r'[A-Za-z0-9]', s)) > 5: return
         seen.add(s)
         results.append({'text': s, 'type': t})
-
     for m in re.finditer(r'[「""]([^「」""]{15,180})[」""]', text): add(m[1], '引用')
     for m in re.finditer(r'([^。！\n]{6,30}[、，][^。！\n]{6,30}[、，][^。！\n]{6,30})[。！]', text):
         if (m[1].count('、') + m[1].count('，')) >= 2: add(m[1], '排比')
-    for m in re.finditer(r'([^。]{8,40}(?:不是|不仅是)[^，]{4,30}，?(?:而是|而且|更是)[^。]{6,40})', text): add(m[1], '对比句式')
+    for m in re.finditer(r'([^。]{8,40}(?:不是|不仅是)[^，]{4,30}，?(?:而是|而且|更是)[^。]{6,40})', text):
+        add(m[1], '对比句式')
     for m in re.finditer(r'(习近平(?:总书记|主席|强调|指出)[\u4e00-\u9fa5、，：""]+?[。！])', text):
         add(m[1].rstrip('。！'), '领导语录')
     for m in re.finditer(r'([^。\n]{12,80}[。])', text):
@@ -396,10 +538,8 @@ def extract_highlights(text):
                 add(st, '论述')
     return results[:8]
 
-
-def score_article(article, cat_key, col_name):
+def score_article(article, cat_key, author_s):
     score = 0
-    author_s = AUTHOR_SCORES.get(col_name, 1)
     score += author_s * 3
     cl = len(article.get('content', ''))
     if cl >= 500: score += 3
@@ -421,10 +561,8 @@ def score_article(article, cat_key, col_name):
     if article.get('pub_date') == today: score += 5
     return score
 
-
-# ── 归档补位: 整栏抓取失败时, 取该栏目最近一次的历史文章 ──
+# ── 归档补位 ──
 def find_backfill_article(cat, yesterday_urls):
-    """按周往前翻历史归档, 挑评分高且未用过的, 限 6 个月内"""
     from datetime import timedelta as _td
     try:
         man_raw = kv_get('manifest')
@@ -433,14 +571,13 @@ def find_backfill_article(cat, yesterday_urls):
         dates = []
     if not dates:
         return None, None
-
-    cutoff = (datetime.now() - _td(days=180)).strftime('%Y-%m-%d')  # 6 个月窗口
+    cutoff = (datetime.now() - _td(days=180)).strftime('%Y-%m-%d')
     best, best_date, best_score = None, None, -1
     weeks_checked = 0
     last_week = None
     for d in dates:
         if d < cutoff:
-            break  # 超出 6 个月, 停止
+            break
         try:
             ad = json.loads(kv_get(f'articles/{d}') or '{}')
         except Exception:
@@ -452,7 +589,7 @@ def find_backfill_article(cat, yesterday_urls):
         if not art.get('title'):
             continue
         if url in yesterday_urls:
-            continue  # 只避免与昨天重复, 更早的旧文允许复用
+            continue
         s = art.get('score', 0)
         if not s:
             s = min(len(art.get('content', '')) / 100.0, 40)
@@ -466,16 +603,13 @@ def find_backfill_article(cat, yesterday_urls):
             best_score, best, best_date = s, art, d
     return best, best_date
 
-
 # ── Main ──
 def main():
-    print(f'[{datetime.now().isoformat()}] Starting daily crawl...')
-    if not CF_TOKEN or not CF_ACCOUNT or not CF_KV_NS:
-        print('[FATAL] CF_API_TOKEN / CF_ACCOUNT_ID / CF_KV_NAMESPACE_ID 未配置（环境变量为空且未在脚本同目录找到 .env）。')
-        print('        请创建 /opt/shenlun/.env 并填入上述变量后重试。脚本已退出。')
+    print(f'[{datetime.now().isoformat()}] Starting daily crawl (multi-source){" [DRYRUN]" if DRYRUN else ""}...')
+    if not DRYRUN and (not CF_TOKEN or not CF_ACCOUNT or not CF_KV_NS):
+        print('[FATAL] CF_API_TOKEN / CF_ACCOUNT_ID / CF_KV_NAMESPACE_ID 未配置。')
         sys.exit(1)
 
-    # Load seen URLs
     seen_raw = kv_get('seen_urls')
     seen = set()
     if seen_raw:
@@ -484,7 +618,6 @@ def main():
         except: pass
     print(f'Loaded {len(seen)} seen URLs')
 
-    # Load yesterday article URLs to prevent re-selecting same articles
     from datetime import timedelta as _td
     _yday = (datetime.now() - _td(days=1)).strftime('%Y-%m-%d')
     _yday_raw = kv_get(f'articles/{_yday}')
@@ -500,37 +633,65 @@ def main():
     today = datetime.now().strftime('%Y-%m-%d')
     articles = {}
     new_seen = set(seen)
+    used_urls = set()  # 同日跨分类去重
 
     for cat_key, cat_cfg in CATEGORIES.items():
         try:
             print(f'\n[{cat_cfg["label"]}]')
-            list_html = fetch(cat_cfg['url'])
-            if not list_html:
-                print('  List page failed')
-                continue
+            # 1) 轮询所有源站，凑候选
+            all_cands = []
+            for s in cat_cfg['sources']:
+                src = SOURCES[s['src']]
+                try:
+                    list_html = fetch(s['url'], referer=src.get('referer'))
+                except Exception as e:
+                    print(f'  [{src["name"]}] list fetch err: {e}')
+                    continue
+                if not list_html:
+                    print(f'  [{src["name"]}] list failed')
+                    continue
+                links = extract_article_links(list_html, src)
+                print(f'  [{src["name"]}] {len(links)} candidates')
+                for lk in links:
+                    lk['_src'] = s['src']
+                all_cands.extend(links)
 
-            links = extract_article_links(list_html)
-            print(f'  {len(links)} candidates')
+            if not all_cands:
+                print('  所有源站均无候选')
+            # 去重 URL，按日期降序，取最新 10 篇
+            _by_url = {}
+            for c in all_cands:
+                if c['url'] not in _by_url:
+                    _by_url[c['url']] = c
+            top = sorted(_by_url.values(), key=lambda x: x['date_str'] or '0000', reverse=True)[:10]
+            print(f'  → 合并去重后 {len(top)} 候选，评分中...')
 
-            # 取最新 5 篇评分: 优先选「未读过」的新稿, 否则取当期最新一篇(保证 8 栏不空)
-            top = links[:5]
             best_unseen, best_unseen_score = None, -1
             best_any, best_any_score = None, -1
             for cand in top:
                 try:
-                    time.sleep(1.5)
-                    html = fetch(cand['url'])
-                    if not html: continue
-                    article = extract_article(html, cand['url'])
-                    if not article or len(article.get('content', '')) < 200: continue
+                    if cand['url'] in used_urls:
+                        continue
+                    src = SOURCES[cand['_src']]
+                    time.sleep(1.2)
+                    html = fetch(cand['url'], referer=src.get('referer'))
+                    if not html:
+                        continue
+                    article = extract_article(html, cand['url'], src)
+                    if not article or len(article.get('content', '')) < 200:
+                        continue
                     col_name = extract_column_info(html)
-                    score = score_article(article, cat_key, col_name)
-                    print(f'    {score:5.1f}分 [{col_name or "未识别"}] {article["title"][:30]}')
+                    author_s = src.get('base_author_score', 5)
+                    if col_name:
+                        author_s = max(author_s, AUTHOR_SCORES.get(col_name, author_s))
+                    score = score_article(article, cat_key, author_s)
+                    print(f'    {score:5.1f}分 [{src["name"]}/{col_name or "未识别"}] {article["title"][:28]}')
                     article['phrases'] = extract_phrases(article.get('content', ''))
                     article['highlights'] = extract_highlights(article.get('content', ''))
                     article['category'] = cat_key
                     article['column_name'] = col_name
                     article['author'] = ''
+                    article['source_name'] = src['name']
                     article['pub_date'] = article.get('pub_date', '')
                     if score > best_any_score:
                         best_any_score = score
@@ -542,7 +703,6 @@ def main():
                 except Exception as e:
                     print(f'    err: {e}')
 
-            # Secondary dedup: skip yesterday's articles even in fallback
             chosen = best_unseen
             if not chosen and best_any:
                 if best_any.get('url') not in yesterday_urls:
@@ -552,41 +712,44 @@ def main():
             if chosen:
                 articles[cat_key] = chosen
                 chosen['score'] = best_unseen_score if chosen is best_unseen else best_any_score
+                used_urls.add(chosen['url'])
                 if chosen is best_unseen:
                     new_seen.add(chosen['url'])
-                    print(f'  🏆 {chosen["title"][:40]} [{best_unseen_score:.1f}分] (新稿)')
+                    print(f'  🏆 {chosen["title"][:36]} [{best_unseen_score:.1f}分] (新稿·{chosen.get("source_name","")})')
                 elif chosen.get('url') in yesterday_urls:
-                    print(f'  🏆 {chosen["title"][:40]} [{best_any_score:.1f}分] (昨日复用)')
+                    print(f'  🏆 {chosen["title"][:36]} [{best_any_score:.1f}分] (昨日复用)')
                 else:
-                    print(f'  🏆 {chosen["title"][:40]} [{best_any_score:.1f}分] (当期最新)')
+                    print(f'  🏆 {chosen["title"][:36]} [{best_any_score:.1f}分] (当期最新·{chosen.get("source_name","")})')
             else:
-                # 整栏抓取失败, 尝试从归档补位
                 last, last_date = find_backfill_article(cat_key, yesterday_urls)
                 if last:
                     last2 = dict(last)
                     last2['backfilled'] = True
                     last2['backfill_from'] = last_date or ''
                     articles[cat_key] = last2
+                    used_urls.add(last.get('url', ''))
                     print(f'  🔄 归档补位: {last_date} 《{last.get("title", "?")[:30]}》')
                 else:
-                    # 最终兜底: 连 6 个月归档都没有, 才用源站当期最新 (保证 8 栏不空)
                     if best_any:
                         last2 = dict(best_any)
                         last2['backfilled'] = True
                         last2['backfill_from'] = today
                         articles[cat_key] = last2
+                        used_urls.add(best_any.get('url', ''))
                         print(f'  🔄 兜底复用当期最新: 《{best_any.get("title", "?")[:30]}》')
                     else:
                         print('  ⚠️ 该栏目 无可用归档且源站无候选')
-            time.sleep(1)
+            time.sleep(0.5)
         except Exception as e:
             print(f'  {cat_cfg["label"]} error: {e}')
 
     count = len(articles)
     print(f'\n[Total] {count}/8 articles')
+    if DRYRUN:
+        print('[DRYRUN] 未写入 KV，验证结束。')
+        return
 
     if count >= 4:
-        # Save
         today_articles = {}
         for k, v in articles.items():
             v2 = dict(v)
@@ -606,7 +769,6 @@ def main():
         kv_put('seen_urls', json.dumps({'urls': list(new_seen)}, ensure_ascii=False))
         print(f'[Save] {count} articles saved to KV')
 
-        # AI idiom defs
         all_chengyu = set()
         for art in articles.values():
             for w in find_chengyu(art.get('content', '')):
@@ -614,7 +776,6 @@ def main():
         print(f'[AI] Generating defs for {len(all_chengyu)} chengyu...')
         sys.stdout.flush()
         ai_works = True
-        # Try one AI request to test
         if all_chengyu:
             test_w = list(all_chengyu)[0]
             test_def = ai_define_chengyu(test_w)
@@ -626,7 +787,6 @@ def main():
                 kv_put(f'idiom:{test_w}', test_def, ttl=90*24*3600)
                 print(f'  OK {test_w}')
                 sys.stdout.flush()
-
         for w in list(all_chengyu)[:30]:
             cached = kv_get(f'idiom:{w}')
             if cached: continue
