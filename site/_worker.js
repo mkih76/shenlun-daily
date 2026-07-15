@@ -170,6 +170,7 @@ button{cursor:pointer;font-family:inherit;border:none;background:none;color:inhe
 .card-excerpt{font-size:.875rem;color:var(--stone);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;flex:1}
 .card-footer{padding:10px 20px;border-top:1px solid var(--hairline-soft);display:flex;gap:8px;font-size:.75rem;color:var(--steel);flex-wrap:wrap}
 .badge{padding:2px 8px;border-radius:var(--radius-full);background:var(--primary-light);color:var(--primary);font-weight:500}
+.badge-bf{background:#fef3cd;color:#856404;border:1px solid #ffeeba}
 
 /* ── Article Page ── */
 .article-page{max-width:var(--content-width);margin:0 auto;padding:32px 24px 80px}
@@ -822,6 +823,7 @@ async function serveHomePage(env) {
         <p class="card-excerpt">${esc(excerpt)}</p>
       </div>
       <div class="card-footer">
+        ${art.backfill_from ? '<span class="badge badge-bf">📋 昨日转载</span>' : ''}
         ${phraseCount > 0 ? `<span class="badge">📝 ${phraseCount}好词</span>` : ''}
         ${hlCount > 0 ? `<span class="badge">✨ ${hlCount}金句</span>` : ''}
         ${art.pub_date ? `<span>${art.pub_date}</span>` : ''}

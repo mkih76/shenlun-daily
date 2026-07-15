@@ -456,6 +456,19 @@ def main():
         except: pass
     print(f'Loaded {len(seen)} seen URLs')
 
+    # Load yesterday article URLs to prevent re-selecting same articles
+    from datetime import timedelta as _td
+    _yday = (datetime.now() - _td(days=1)).strftime('%Y-%m-%d')
+    _yday_raw = kv_get(f'articles/{_yday}')
+    yesterday_urls = set()
+    if _yday_raw:
+        try:
+            _ya = json.loads(_yday_raw)
+            yesterday_urls = set(a.get('url', '') for a in _ya.values() if a.get('url'))
+        except Exception:
+            pass
+    print(f'Loaded {len(yesterday_urls)} yesterday URLs ({_yday})')
+
     today = datetime.now().strftime('%Y-%m-%d')
     articles = {}
     new_seen = set(seen)
@@ -501,12 +514,20 @@ def main():
                 except Exception as e:
                     print(f'    err: {e}')
 
-            chosen = best_unseen or best_any
+            # Secondary dedup: skip yesterday's articles even in fallback
+            chosen = best_unseen
+            if not chosen and best_any:
+                if best_any.get('url') not in yesterday_urls:
+                    chosen = best_any
+                else:
+                    print(f'    ⚠️ Best candidate was used yesterday, skipping...')
             if chosen:
                 articles[cat_key] = chosen
                 if chosen is best_unseen:
                     new_seen.add(chosen['url'])
                     print(f'  🏆 {chosen["title"][:40]} [{best_unseen_score:.1f}分] (新稿)')
+                elif chosen.get('url') in yesterday_urls:
+                    print(f'  🏆 {chosen["title"][:40]} [{best_any_score:.1f}分] (昨日复用)')
                 else:
                     print(f'  🏆 {chosen["title"][:40]} [{best_any_score:.1f}分] (当期最新)')
             else:
